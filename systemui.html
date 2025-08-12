@@ -6,16 +6,12 @@
   <title>System UI — QS Pull-down + One UI / AOSP switch</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#000000" />
-
-  <!-- Material Symbols Outlined -->
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300..700&display=swap" rel="stylesheet" />
-
   <style>
     :root{
       --bg:#000; --fg:#fff; --muted:#a1a1aa;
       --qs-bg:rgba(28,28,32,.96);
-      --qs-card:#1f1f24; /* tile bg */
-      --qs-card-hi:#2a2a31; /* pressed/active */
+      --qs-card:#1f1f24; --qs-card-hi:#2a2a31;
       --accent:#8ea4ff;
       --bar-h:28px; --nav-h:44px; --radius:16px; --radius-pill:999px;
       --font:system-ui,-apple-system,Segoe UI,Roboto,Noto Sans,Arial,sans-serif;
@@ -29,10 +25,10 @@
       padding-bottom:calc(env(safe-area-inset-bottom) + var(--nav-h));
       padding-left:env(safe-area-inset-left);
       padding-right:env(safe-area-inset-right);
-      overflow:hidden; /* we manage scroll/drag ourselves */
+      overflow:hidden;
     }
 
-    /* STATUS BAR */
+    /* Status bar */
     .statusbar{
       position:fixed; inset:0 0 auto 0;
       height:calc(env(safe-area-inset-top) + var(--bar-h));
@@ -52,13 +48,10 @@
     }
 
     /* Battery — One UI pill (no nub) + AOSP alt */
-    .battery.oneui{
-      height:18px; display:inline-flex; align-items:center; font-weight:700; color:#000;
-    }
+    .battery.oneui{ height:18px; display:inline-flex; align-items:center; font-weight:700; color:#000 }
     .battery.oneui .capsule{
       display:inline-flex; align-items:center; justify-content:center;
-      min-width:28px; padding:0 6px; height:18px;
-      border-radius:var(--radius-pill); background:#fff;
+      min-width:28px; padding:0 6px; height:18px; border-radius:var(--radius-pill); background:#fff;
     }
     .battery.oneui .txt{ font-size:12px; line-height:1 }
     .battery.aosp{ height:16px; display:inline-flex; align-items:center; gap:6px }
@@ -67,14 +60,11 @@
     .battery.aosp .fill{ position:absolute; inset:0 auto 0 0; width:60%; background:#22c55e; border-top-left-radius:1px; border-bottom-left-radius:1px }
     .battery.aosp .pct{ font-size:12px; opacity:.9 }
 
-    /* CONTENT PLACEHOLDER */
+    /* Content */
     main{ position:relative; z-index:1; height:100% }
-    .placeholder{
-      display:grid; place-items:center; height:100%;
-      color:var(--muted); text-align:center; padding:24px;
-    }
+    .placeholder{ display:grid; place-items:center; height:100%; color:var(--muted); text-align:center; padding:24px }
 
-    /* NAV BAR MOCK */
+    /* Nav bar mock */
     .navbar{
       position:fixed; inset:auto 0 0 0; height:calc(env(safe-area-inset-bottom) + var(--nav-h));
       padding-bottom:env(safe-area-inset-bottom); display:grid; place-items:center; z-index:10;
@@ -83,7 +73,7 @@
     body[data-style="aosp"]  .navbar{ background:rgba(0,0,0,.76) }
     .gesture-pill{ width:120px; height:5px; border-radius:999px; background:rgba(255,255,255,.8) }
 
-    /* QS SHEET */
+    /* Scrim + QS sheet */
     .scrim{
       position:fixed; inset:0; background:rgba(0,0,0,.0); opacity:0; pointer-events:none; transition:opacity .18s ease; z-index:25;
     }
@@ -91,39 +81,32 @@
 
     .qs{
       position:fixed; left:env(safe-area-inset-left); right:env(safe-area-inset-right);
-      top:calc(-70dvh); /* start hidden above */
-      margin:0 auto;
+      top:0; margin:0 auto;
+      transform:translate3d(0, -70dvh, 0); /* closed position */
       padding:8px 8px calc(16px + env(safe-area-inset-bottom));
       background:var(--qs-bg);
       border-top-left-radius:20px; border-top-right-radius:20px;
       box-shadow:0 10px 30px rgba(0,0,0,.45);
-      transform:translateY(0); will-change:transform;
-      touch-action:none; /* we implement drag */
-      z-index:40;
+      will-change:transform; /* GPU-friendly for 120 Hz */
+      touch-action:none; z-index:40;
     }
-    .qs.open{ /* snapped open state from JS by translateY */ }
-    .qs .grab{
-      display:grid; place-items:center; padding:10px 0 6px 0;
+    .qs.anim{ transition:transform 180ms cubic-bezier(.2,.8,.2,1) }
+    @media (prefers-reduced-motion: reduce){
+      .qs.anim{ transition-duration:0ms }
     }
-    .qs .grab .bar{
-      width:44px; height:4px; border-radius:999px; background:#5a5a64;
-    }
-    .qs-header{
-      display:grid; grid-template-columns:1fr auto; align-items:center; padding:6px 8px 10px 8px;
-    }
+
+    .qs .grab{ display:grid; place-items:center; padding:10px 0 6px 0 }
+    .qs .grab .bar{ width:44px; height:4px; border-radius:999px; background:#5a5a64 }
+
+    .qs-header{ display:grid; grid-template-columns:1fr auto; align-items:center; padding:6px 8px 10px 8px }
     .qs-clock{ font-size:28px; font-weight:700 }
     .qs-row{ display:grid; gap:10px; padding:0 6px 10px 6px }
-    .qs-grid{
-      display:grid; gap:10px;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-    }
+    .qs-grid{ display:grid; gap:10px; grid-template-columns:repeat(2, minmax(0,1fr)) }
     @media (min-width:480px){ .qs-grid{ grid-template-columns:repeat(3, minmax(0,1fr)) } }
 
     .tile{
-      background:var(--qs-card);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:18px;
-      padding:14px;
+      background:var(--qs-card); border:1px solid rgba(255,255,255,.06);
+      border-radius:18px; padding:14px;
       display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:center;
       transition:background .12s ease, border-color .12s ease, transform .06s ease;
       user-select:none;
@@ -133,26 +116,19 @@
     .tile .material-symbols-outlined{ font-size:22px }
     .tile .label{ font-weight:600 }
     .tile .sub{ font-size:12px; color:var(--muted) }
-
     .tile.primary{ outline:2px solid rgba(142,164,255,.25); background:linear-gradient(0deg, rgba(142,164,255,.16), rgba(142,164,255,.08)) }
 
-    .slider{
-      background:var(--qs-card);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:18px; padding:14px;
-      display:grid; gap:8px;
-    }
+    .slider{ background:var(--qs-card); border:1px solid rgba(255,255,255,.06); border-radius:18px; padding:14px; display:grid; gap:8px }
     .slider input[type="range"]{ width:100%; appearance:none; height:4px; background:#3a3a42; border-radius:999px; outline:none }
     .slider input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none; width:20px; height:20px; border-radius:50%; background:#fff; border:none }
     .row-inline{ display:flex; align-items:center; gap:10px }
 
-    /* STYLE VARIANTS TOGGLED BY BODY ATTR */
     body[data-style="oneui"] .qs{ backdrop-filter:saturate(120%) blur(16px) }
     body[data-style="aosp"]  .qs{ backdrop-filter:blur(14px) }
   </style>
 </head>
 <body data-style="oneui">
-  <!-- STATUS BAR -->
+  <!-- Status bar -->
   <div class="statusbar">
     <div class="slot left"><span id="sbClock">14:31</span></div>
     <div class="slot center" aria-hidden="true"></div>
@@ -168,17 +144,17 @@
     </div>
   </div>
 
-  <!-- MAIN PLACEHOLDER -->
+  <!-- Content -->
   <main>
     <div class="placeholder">
       <div>
-        <div style="font-size:18px; margin-bottom:8px;">Pull down anywhere to open Quick Settings</div>
-        <div style="font-size:14px;">Tap the <b>Style</b> tile to switch between One UI and AOSP.</div>
+        <div style="font-size:18px; margin-bottom:8px;">Pull down (touch, mouse drag, or mouse wheel) to open Quick Settings</div>
+        <div style="font-size:14px;">Tap the <b>Style</b> tile to switch One UI/AOSP.</div>
       </div>
     </div>
   </main>
 
-  <!-- SCRIM + QS SHEET -->
+  <!-- Scrim + QS sheet -->
   <div id="scrim" class="scrim"></div>
   <section id="qs" class="qs" aria-label="Quick Settings" aria-modal="true">
     <div class="grab"><div class="bar"></div></div>
@@ -204,60 +180,31 @@
 
     <div class="qs-row">
       <div class="qs-grid">
-        <!-- Internet -->
         <button class="tile primary" type="button">
           <div class="icon"><span class="material-symbols-outlined">wifi</span></div>
-          <div>
-            <div class="label">Internet</div>
-            <div class="sub">Rahman</div>
-          </div>
+          <div><div class="label">Internet</div><div class="sub">Rahman</div></div>
           <span class="material-symbols-outlined">chevron_right</span>
         </button>
-
-        <!-- Bluetooth -->
         <button class="tile primary" type="button">
           <div class="icon"><span class="material-symbols-outlined">bluetooth</span></div>
-          <div>
-            <div class="label">Bluetooth</div>
-            <div class="sub">On</div>
-          </div>
+          <div><div class="label">Bluetooth</div><div class="sub">On</div></div>
           <span class="material-symbols-outlined">chevron_right</span>
         </button>
-
-        <!-- Flashlight -->
         <button class="tile" type="button" id="flashTile">
           <div class="icon"><span class="material-symbols-outlined">flashlight_on</span></div>
-          <div>
-            <div class="label">Flashlight</div>
-            <div class="sub" id="flashSub">Off</div>
-          </div>
+          <div><div class="label">Flashlight</div><div class="sub" id="flashSub">Off</div></div>
         </button>
-
-        <!-- DND -->
         <button class="tile" type="button" id="dndTile">
           <div class="icon"><span class="material-symbols-outlined">do_not_disturb_on</span></div>
-          <div>
-            <div class="label">Do Not Disturb</div>
-            <div class="sub" id="dndSub">Off</div>
-          </div>
+          <div><div class="label">Do Not Disturb</div><div class="sub" id="dndSub">Off</div></div>
         </button>
-
-        <!-- Airplane -->
         <button class="tile" type="button" id="airTile">
           <div class="icon"><span class="material-symbols-outlined">airplanemode_active</span></div>
-          <div>
-            <div class="label">Airplane mode</div>
-            <div class="sub" id="airSub">Off</div>
-          </div>
+          <div><div class="label">Airplane mode</div><div class="sub" id="airSub">Off</div></div>
         </button>
-
-        <!-- STYLE SWITCH -->
         <button class="tile" type="button" id="styleTile" title="Toggle One UI / AOSP">
           <div class="icon"><span class="material-symbols-outlined">palette</span></div>
-          <div>
-            <div class="label">Style</div>
-            <div class="sub" id="styleSub">One UI</div>
-          </div>
+          <div><div class="label">Style</div><div class="sub" id="styleSub">One UI</div></div>
         </button>
       </div>
     </div>
@@ -274,7 +221,7 @@
     </div>
   </section>
 
-  <!-- NAV BAR -->
+  <!-- Nav bar -->
   <div class="navbar"><div class="gesture-pill"></div></div>
 
   <script>
@@ -282,32 +229,32 @@
       'use strict';
 
       const body = document.body;
-
-      // STATUS BAR refs
       const sbClock = document.getElementById('sbClock');
-      const batteryWrap  = document.getElementById('batteryWrap');
-      const batteryTxt   = document.getElementById('batteryTxt');
-      const batteryFill  = document.getElementById('batteryFill');
-      const batteryPct   = document.getElementById('batteryPct');
-
-      // QS refs
+      const qsClock = document.getElementById('qsClock');
       const scrim = document.getElementById('scrim');
       const qs = document.getElementById('qs');
-      const qsClock = document.getElementById('qsClock');
+
+      // Battery refs
+      const batteryWrap = document.getElementById('batteryWrap');
+      const batteryTxt  = document.getElementById('batteryTxt');
+      const batteryFill = document.getElementById('batteryFill');
+      const batteryPct  = document.getElementById('batteryPct');
+      const battRange   = document.getElementById('battRange');
+      const battVal     = document.getElementById('battVal');
+
+      // Tiles & sliders
       const styleTile = document.getElementById('styleTile');
       const styleSub  = document.getElementById('styleSub');
       const brightRange = document.getElementById('brightRange');
       const brightVal = document.getElementById('brightVal');
-      const battRange = document.getElementById('battRange');
-      const battVal = document.getElementById('battVal');
       const flashTile = document.getElementById('flashTile');
-      const dndTile = document.getElementById('dndTile');
-      const airTile = document.getElementById('airTile');
-      const flashSub = document.getElementById('flashSub');
-      const dndSub = document.getElementById('dndSub');
-      const airSub = document.getElementById('airSub');
+      const dndTile   = document.getElementById('dndTile');
+      const airTile   = document.getElementById('airTile');
+      const flashSub  = document.getElementById('flashSub');
+      const dndSub    = document.getElementById('dndSub');
+      const airSub    = document.getElementById('airSub');
 
-      // CLOCK
+      /* -------- Clock -------- */
       function renderClock(){
         const now = new Date();
         const h = String(now.getHours()).padStart(2,'0');
@@ -318,45 +265,38 @@
       }
       renderClock(); setInterval(renderClock, 1000);
 
-      // BATTERY (manual slider in QS controls status bar)
+      /* -------- Battery (manual) -------- */
       function setBattery(pct){
         pct = Math.max(0, Math.min(100, pct));
-        // One UI pill
-        if (batteryWrap.classList.contains('oneui')){
+        if (batteryWrap.classList.contains('oneui')) {
           batteryTxt.textContent = pct;
-        } else { // AOSP outline
+        } else {
           batteryPct.textContent = pct + '%';
           batteryFill.style.width = pct + '%';
         }
         battVal.textContent = pct + '%';
       }
-      battRange.addEventListener('input', () => setBattery(Number(battRange.value)));
+      battRange.addEventListener('input', () => setBattery(Number(battRange.value)), {passive:true});
       setBattery(Number(battRange.value));
 
-      // STYLE TOGGLE
-      function toggleStyle(){
-        const to = body.getAttribute('data-style') === 'oneui' ? 'aosp' : 'oneui';
-        applyStyle(to);
-      }
+      /* -------- Style toggle -------- */
       function applyStyle(mode){
         body.setAttribute('data-style', mode);
         const isOne = mode === 'oneui';
         styleSub.textContent = isOne ? 'One UI' : 'AOSP';
-
-        // Switch battery presentation
         batteryWrap.className = 'battery ' + (isOne ? 'oneui' : 'aosp');
         const cap = batteryWrap.querySelector('.capsule');
         const icon = batteryWrap.querySelector('.icon');
         if (cap) cap.hidden = !isOne;
         if (icon) icon.hidden = isOne;
         batteryPct.hidden = isOne;
-
-        // Re-render battery with current value
         setBattery(Number(battRange.value));
       }
-      styleTile.addEventListener('click', toggleStyle);
+      function toggleStyle(){ applyStyle(body.getAttribute('data-style') === 'oneui' ? 'aosp' : 'oneui'); }
+      styleTile.addEventListener('click', toggleStyle, {passive:true});
+      applyStyle('oneui');
 
-      // Simple toggles
+      /* -------- Tile toggles -------- */
       bindToggle(flashTile, flashSub);
       bindToggle(dndTile, dndSub);
       bindToggle(airTile, airSub);
@@ -365,80 +305,100 @@
           const on = sub.textContent === 'On';
           sub.textContent = on ? 'Off' : 'On';
           btn.classList.toggle('primary', !on);
-        });
+        }, {passive:true});
       }
-
-      // Brightness demo
       brightRange.addEventListener('input', () => {
         const v = Number(brightRange.value);
         brightVal.textContent = v + '%';
-        // You could also set body opacity or a css var here to simulate dimming
-      });
+      }, {passive:true});
 
-      /* ===== PULL-DOWN SHEET: drag physics ===== */
-      const openY = 0;           // translateY when open
-      const closedY = -window.innerHeight * 0.70; // off-screen position
-      let curY = closedY;
-      let startY = 0;
-      let dragging = false;
-      let lastTs = 0, lastY = 0, velocity = 0;
+      /* -------- Pull-down (touch + mouse) with rAF scheduling -------- */
+      const openY   = 0;
+      let closedY   = -window.innerHeight * 0.70;
+      let curY      = closedY;
+      let startY    = 0;
+      let dragging  = false;
+      let lastTs    = 0, lastY = 0, velocity = 0;
+      let rafPending = false;
+
+      function measureClosed(){ closedY = -window.innerHeight * 0.70; if (!dragging) setSheet(closedY, false); }
+      window.addEventListener('resize', measureClosed, {passive:true});
 
       function setSheet(y, snap){
-        curY = y;
-        qs.style.transform = `translateY(${y}px)`;
-        const t = 1 - Math.min(1, Math.max(0, (closedY - y)/(closedY - openY)));
-        scrim.classList.toggle('on', t > 0.02);
-        scrim.style.opacity = String(t);
-        if (snap) qs.classList.toggle('open', y === openY);
+        curY = Math.min(openY, Math.max(closedY, y));
+        // rAF to avoid flooding at 120 Hz
+        if (!rafPending){
+          rafPending = true;
+          requestAnimationFrame(() => {
+            rafPending = false;
+            // Only add transition on snaps
+            if (snap) qs.classList.add('anim'); else qs.classList.remove('anim');
+            qs.style.transform = `translate3d(0, ${curY}px, 0)`;
+            const t = 1 - Math.min(1, Math.max(0, (closedY - curY)/(closedY - openY)));
+            scrim.classList.toggle('on', t > 0.02);
+            scrim.style.opacity = String(t);
+          });
+        }
       }
+
+      function open(){ setSheet(openY, true); }
+      function close(){ setSheet(closedY, true); }
+
       function snapByVelocity(){
-        const threshold = 0.35;
-        if (velocity > threshold) open(); else if (velocity < -threshold) close();
+        const threshold = 0.35; // px/ms
+        if (velocity > threshold) open();
+        else if (velocity < -threshold) close();
         else {
-          // decide by position
           const mid = (openY + closedY)/2;
           (curY > mid) ? open() : close();
         }
       }
-      function open(){ setSheet(openY, true); }
-      function close(){ setSheet(closedY, true); }
 
       // Start closed
       setSheet(closedY, false);
 
-      // Open on swipe-down anywhere
-      document.addEventListener('pointerdown', (e)=>{
-        // If QS already open, allow drag from inside. If closed, start when near top 25%
+      // Gesture start: touch or mouse
+      window.addEventListener('pointerdown', (e) => {
         const vh = window.innerHeight;
         const okArea = (curY === closedY && e.clientY < vh * 0.25) || curY !== closedY;
         if (!okArea) return;
         dragging = true;
         startY = e.clientY - curY;
         lastTs = e.timeStamp; lastY = e.clientY; velocity = 0;
-        qs.setPointerCapture(e.pointerId);
-      });
-      document.addEventListener('pointermove', (e)=>{
+      }, {passive:true});
+
+      window.addEventListener('pointermove', (e) => {
         if (!dragging) return;
         const y = Math.min(openY, Math.max(closedY, e.clientY - startY));
-        // velocity
         const dt = Math.max(1, e.timeStamp - lastTs);
         velocity = (e.clientY - lastY) / dt; // px per ms
         lastTs = e.timeStamp; lastY = e.clientY;
         setSheet(y, false);
-      });
-      document.addEventListener('pointerup', ()=>{
+      }, {passive:true});
+
+      window.addEventListener('pointerup', () => {
         if (!dragging) return;
         dragging = false;
         snapByVelocity();
-      });
+      }, {passive:true});
 
-      // Tap scrim to close
-      scrim.addEventListener('click', close);
+      // Mouse wheel support: scroll down near top opens; scroll up closes
+      window.addEventListener('wheel', (e) => {
+        const vh = window.innerHeight;
+        if (curY === closedY && e.clientY < vh * 0.30 && e.deltaY > 8){
+          open(); e.preventDefault();
+        } else if (curY !== closedY && e.deltaY < -8){
+          close(); e.preventDefault();
+        }
+      }, {passive:false});
 
-      // Pull-down hint: swipe down gesture from status bar opens
-      document.querySelector('.statusbar').addEventListener('click', open);
+      // Tap scrim or statusbar to toggle
+      scrim.addEventListener('click', close, {passive:true});
+      document.querySelector('.statusbar').addEventListener('click', () => {
+        (curY === closedY) ? open() : close();
+      }, {passive:true});
 
-      // Init style from query (?style=aosp)
+      // Prefill style from query (?style=aosp)
       const qp = new URLSearchParams(location.search);
       const initialStyle = qp.get('style');
       applyStyle(initialStyle === 'aosp' ? 'aosp' : 'oneui');
