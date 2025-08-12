@@ -80,4 +80,5 @@ Known for leading high-performing teams and fostering a collaborative, growth-or
 
 ### MD3 Tone Generator
 
-[▶ Open Tone Generator](/tone.html)
+[Open Tone Generator](/tone.html)
+[Open Systemui](/systemui.html)
