@@ -1,0 +1,395 @@
+<!-- index.html
+     Tone Generator web app for GitHub Pages
+     Single-file drop-in: place at https://<user>.github.io/tone-generator/ or root.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tone Generator — MD3‑ish, fast, mobile‑friendly</title>
+  <meta name="theme-color" content="#0a0f0a" />
+  <style>
+    :root{
+      --bg:#0a0f0a;            /* near‑black CRT */
+      --panel:#111812;         /* cards */
+      --text:#e8fbe8;          /* phosphor‑tinted */
+      --muted:#9fd39f;         /* secondary */
+      --accent:#5cf25c;        /* bright green */
+      --danger:#ff6464;        /* stop */
+      --radius:16px;
+      --gap:12px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font:14px/1.3 system-ui,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
+      color:var(--text); background:var(--bg);
+      display:grid; place-items:start center;
+      padding:20px;
+    }
+    .app{display:grid; gap:var(--gap); width:min(1050px,100%)}
+    .grid{display:grid; gap:var(--gap); grid-template-columns:1.1fr 1fr}
+    @media (max-width:920px){ .grid{grid-template-columns:1fr} }
+
+    .card{background:var(--panel); border-radius:var(--radius); padding:16px; box-shadow:0 1px 0 #0d150f, 0 6px 24px rgba(0,0,0,.35)}
+    h1{margin:0 0 8px 0; font-size:20px; letter-spacing:.2px}
+    h2{margin:0 0 6px 0; font-size:14px; color:var(--muted); font-weight:600}
+
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    .full{grid-column:1/-1}
+
+    label{display:grid; gap:6px}
+    .stack{display:grid; gap:8px}
+
+    input[type="range"]{width:100%}
+    input, select, button{border:1px solid #233823; background:#0e150f; color:var(--text); border-radius:12px; padding:10px 12px; outline:none}
+    select{appearance:none}
+
+    .btn{cursor:pointer; user-select:none; transition:transform .06s ease}
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{background:linear-gradient(180deg,#153d15,#0d230d); border-color:#1b4d1b}
+    .btn.stop{background:linear-gradient(180deg,#3a0b0b,#220606); border-color:#5a1a1a; color:#ffd9d9}
+    .preset{display:flex; flex-wrap:wrap; gap:8px}
+
+    .muted{color:var(--muted); opacity:.9}
+
+    canvas{width:100%; height:260px; display:block; background:radial-gradient(1200px 320px at 50% 20%,rgba(92,242,92,.06),rgba(0,0,0,0)), #000; border-radius:14px; outline:1px solid #1b311b}
+
+    .phosphor-glow{ filter: drop-shadow(0 0 6px rgba(92,242,92,.25)) drop-shadow(0 0 14px rgba(92,242,92,.12)); }
+
+    .kbd{display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:6px}
+    .kbd button{padding:8px; font-size:12px}
+
+    footer{opacity:.85; font-size:12px; text-align:center}
+    a{color:var(--accent)}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="card">
+      <h1> Tone Generator <span class="muted">— Web Audio</span></h1>
+      <div class="muted">Sine, square, saw, triangle. Stereo. Presets. Oscilloscope. Mobile‑friendly.</div>
+    </header>
+
+    <section class="grid">
+      <div class="card stack">
+        <h2>Signal</h2>
+        <div class="row">
+          <label>
+            <span>Waveform</span>
+            <select id="waveform">
+              <option value="sine">Sine</option>
+              <option value="square">Square</option>
+              <option value="sawtooth">Saw</option>
+              <option value="triangle">Triangle</option>
+            </select>
+          </label>
+          <label>
+            <span>Master gain</span>
+            <input id="gain" type="range" min="0" max="2" step="0.01" value="0.2" />
+          </label>
+        </div>
+        <div class="row">
+          <label>
+            <span>Frequency (Hz)</span>
+            <input id="freq" type="range" min="20" max="20000" step="1" value="440" />
+          </label>
+          <label>
+            <span>Fine tune</span>
+            <input id="fine" type="range" min="-100" max="100" step="0.1" value="0" />
+          </label>
+        </div>
+        <div class="row">
+          <label>
+            <span>Overdrive</span>
+            <input id="drive" type="range" min="0" max="1" step="0.01" value="0" />
+          </label>
+          <label>
+            <span>Stereo spread (cents)</span>
+            <input id="spread" type="range" min="0" max="50" step="1" value="0" />
+          </label>
+        </div>
+        <div class="row full">
+          <button id="toggle" class="btn primary">Start</button>
+          <button id="stop" class="btn stop">Stop</button>
+        </div>
+
+        <h2>Presets</h2>
+        <div class="preset">
+          <button class="btn" data-preset="hum60">60 Hz Transformer Hum</button>
+          <button class="btn" data-preset="hum50">50 Hz Mains</button>
+          <button class="btn" data-preset="sweep">20→20k Sweep</button>
+          <button class="btn" data-preset="binaural">Binaural 440/444</button>
+        </div>
+
+        <h2>Keyboard</h2>
+        <div class="kbd">
+          <!-- 1 octave quick keys A‑A -->
+          <button class="btn" data-note="220">A3</button>
+          <button class="btn" data-note="233.08">A#3</button>
+          <button class="btn" data-note="246.94">B3</button>
+          <button class="btn" data-note="261.63">C4</button>
+          <button class="btn" data-note="277.18">C#4</button>
+          <button class="btn" data-note="293.66">D4</button>
+          <button class="btn" data-note="311.13">D#4</button>
+          <button class="btn" data-note="329.63">E4</button>
+          <button class="btn" data-note="349.23">F4</button>
+          <button class="btn" data-note="369.99">F#4</button>
+          <button class="btn" data-note="392.00">G4</button>
+          <button class="btn" data-note="440.00">A4</button>
+        </div>
+      </div>
+
+      <div class="card stack">
+        <h2>Oscilloscope</h2>
+        <canvas id="scope" class="phosphor-glow"></canvas>
+        <div class="muted">Green CRT style. Low CPU. Stops when audio stops.</div>
+      </div>
+    </section>
+
+    <footer class="card">
+      <span class="muted">Pro tip: mobile browsers require a tap before audio starts. </span>
+      <span class="muted">Source on GitHub Pages.</span>
+    </footer>
+  </div>
+
+  <script>
+  // ===== Audio engine =====
+  const els = {
+    waveform: document.getElementById('waveform'),
+    gain: document.getElementById('gain'),
+    freq: document.getElementById('freq'),
+    fine: document.getElementById('fine'),
+    drive: document.getElementById('drive'),
+    spread: document.getElementById('spread'),
+    toggle: document.getElementById('toggle'),
+    stop: document.getElementById('stop'),
+    scope: document.getElementById('scope'),
+  };
+
+  let ctx, oscL, oscR, gain, analyser, drive, shaper, merger, rafId, sweepId;
+  const state = { running:false };
+
+  function centsToRatio(c){ return Math.pow(2, c / 1200); }
+
+  function makeShaper(amount){
+    const ws = new WaveShaperNode(ctx, { oversample: '4x' });
+    const k = amount * 1000 + 0.0001; // soft clipper
+    const n = 44100;
+    const curve = new Float32Array(n);
+    for (let i=0; i<n; i++){
+      const x = i / n * 2 - 1;
+      curve[i] = (1 + k) * x / (1 + k * Math.abs(x));
+    }
+    ws.curve = curve;
+    return ws;
+  }
+
+  function ensureContext(){
+    if (ctx) return;
+    ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint:'interactive' });
+
+    // Nodes
+    oscL = new OscillatorNode(ctx, { type: els.waveform.value, frequency: Number(els.freq.value) });
+    oscR = new OscillatorNode(ctx, { type: els.waveform.value, frequency: Number(els.freq.value) });
+    const splitter = new ChannelSplitterNode(ctx, { numberOfOutputs: 2 });
+    merger = new ChannelMergerNode(ctx, { numberOfInputs: 2 });
+    gain = new GainNode(ctx, { gain: Number(els.gain.value) });
+    drive = new GainNode(ctx, { gain: 1 });
+    shaper = makeShaper(Number(els.drive.value));
+    analyser = new AnalyserNode(ctx, { fftSize: 2048, smoothingTimeConstant: 0.06 });
+
+    // Routing: L/R oscs -> drive -> shaper -> gain -> analyser -> destination
+    oscL.connect(drive).connect(shaper).connect(gain).connect(analyser).connect(ctx.destination);
+    oscR.connect(drive).connect(shaper);
+    // Pan by manually sending to channels
+    const lGain = new GainNode(ctx, { gain: 1 });
+    const rGain = new GainNode(ctx, { gain: 1 });
+    drive.connect(lGain).connect(merger, 0, 0);
+    drive.connect(rGain).connect(merger, 0, 1);
+    merger.connect(shaper);
+
+    // Update Media Session
+    if ('mediaSession' in navigator){
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: 'Tone Generator', artist: 'Web Audio', album: 'Lab', artwork: []
+      });
+      navigator.mediaSession.setActionHandler('play', start);
+      navigator.mediaSession.setActionHandler('pause', stop);
+      navigator.mediaSession.playbackState = 'paused';
+    }
+
+  // Resume only when Start is pressed, not on any click/touch
+  // Remove auto-resume listeners. Resume is handled in start().
+  }
+
+  function setFrequencies(){
+    const base = Number(els.freq.value);
+    const fine = Number(els.fine.value);
+    const spread = Number(els.spread.value);
+    const left = (base + fine);
+    const right = (base + fine) * centsToRatio(spread);
+    oscL.frequency.setTargetAtTime(left, ctx.currentTime, 0.01);
+    oscR.frequency.setTargetAtTime(right, ctx.currentTime, 0.01);
+  }
+
+  function start(){
+    ensureContext();
+    setFrequencies();
+    oscL.type = oscR.type = els.waveform.value;
+    shaper.disconnect();
+    shaper = makeShaper(Number(els.drive.value));
+    drive.connect(shaper).connect(gain).connect(analyser).connect(ctx.destination);
+    if (state.running) return;
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(() => {
+        oscL.start();
+        oscR.start();
+        state.running = true;
+        els.toggle.textContent = 'Pause';
+        navigator.mediaSession && (navigator.mediaSession.playbackState = 'playing');
+        draw();
+      });
+    } else {
+      oscL.start();
+      oscR.start();
+      state.running = true;
+      els.toggle.textContent = 'Pause';
+      navigator.mediaSession && (navigator.mediaSession.playbackState = 'playing');
+      draw();
+    }
+  }
+
+  function pause(){
+    if (!state.running) return;
+    ctx.suspend();
+    state.running = false;
+    els.toggle.textContent = 'Resume';
+    navigator.mediaSession && (navigator.mediaSession.playbackState = 'paused');
+    cancelAnimationFrame(rafId);
+    if (sweepId) cancelAnimationFrame(sweepId);
+  }
+
+  function stop(){
+    if (!ctx) return;
+    try{ oscL.stop(); oscR.stop(); }catch(e){}
+    cancelAnimationFrame(rafId);
+    if (sweepId) cancelAnimationFrame(sweepId);
+    ctx.close();
+    ctx = oscL = oscR = gain = analyser = drive = shaper = merger = null;
+    state.running = false;
+    els.toggle.textContent = 'Start';
+    navigator.mediaSession && (navigator.mediaSession.playbackState = 'none');
+  }
+
+  function draw(){
+    const canvas = els.scope;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W = canvas.clientWidth * dpr;
+    const H = canvas.clientHeight * dpr;
+    if (canvas.width !== W) canvas.width = W;
+    if (canvas.height !== H) canvas.height = H;
+    const g = canvas.getContext('2d');
+
+    const buffer = new Uint8Array(analyser.fftSize);
+
+    const render = () => {
+      rafId = requestAnimationFrame(render);
+      analyser.getByteTimeDomainData(buffer);
+
+      // Faint phosphor persistence
+      g.globalCompositeOperation = 'source-over';
+      g.fillStyle = 'rgba(0,0,0,0.15)';
+      g.fillRect(0,0,W,H);
+
+      // Grid
+      g.strokeStyle = 'rgba(92,242,92,0.08)';
+      g.lineWidth = 1;
+      for (let x=0; x<W; x+=Math.floor(W/10)){
+        g.beginPath(); g.moveTo(x,0); g.lineTo(x,H); g.stroke();
+      }
+      for (let y=0; y<H; y+=Math.floor(H/6)){
+        g.beginPath(); g.moveTo(0,y); g.lineTo(W,y); g.stroke();
+      }
+
+      // Trace
+      g.globalCompositeOperation = 'lighter';
+      g.strokeStyle = 'rgba(92,242,92,0.9)';
+      g.lineWidth = 2;
+      g.beginPath();
+      const slice = W / buffer.length;
+      for (let i=0; i<buffer.length; i++){
+        const v = buffer[i] / 128 - 1; // -1..1
+        const x = i * slice;
+        const y = H/2 + v * H/2 * 0.9;
+        i ? g.lineTo(x,y) : g.moveTo(x,y);
+      }
+      g.stroke();
+    };
+    render();
+  }
+
+  // ===== Presets =====
+  const runPreset = (name) => {
+    switch(name){
+      case 'hum60':
+        els.waveform.value = 'sawtooth';
+        els.freq.value = 60; els.fine.value = 0; els.drive.value = 0.15; els.gain.value = 0.25;
+        els.spread.value = 0; start(); break;
+      case 'hum50':
+        els.waveform.value = 'sawtooth';
+        els.freq.value = 50; els.fine.value = 0; els.drive.value = 0.2; els.gain.value = 0.25;
+        els.spread.value = 0; start(); break;
+      case 'sweep':
+        start();
+        const t0 = performance.now();
+        const dur = 8000; // 8s
+        const sweep = () => {
+          const t = performance.now() - t0;
+          const k = Math.min(t / dur, 1);
+          const f = 20 * Math.pow(1000, k); // 20 -> 20k logarithmic-ish
+          els.freq.value = Math.min(20000, f).toFixed(2);
+          setFrequencies();
+          if (k < 1) sweepId = requestAnimationFrame(sweep);
+        };
+        sweep();
+        break;
+      case 'binaural':
+        els.waveform.value = 'sine';
+        els.freq.value = 440; els.fine.value = 0; els.spread.value = 15; // ~15 cents beat
+        els.drive.value = 0; els.gain.value = 0.2; start();
+        break;
+    }
+  };
+
+  // ===== Events =====
+  els.toggle.addEventListener('click', () => {
+    if (!ctx || ctx.state === 'suspended') return start();
+    pause();
+  });
+  els.stop.addEventListener('click', stop);
+
+  [els.waveform, els.gain, els.drive].forEach(el => el.addEventListener('input', () => {
+    if (!ctx) return; if (el === els.gain) gain.gain.value = Number(el.value);
+    if (el === els.waveform){ oscL.type = oscR.type = el.value; }
+    if (el === els.drive){
+      shaper.disconnect();
+      shaper = makeShaper(Number(el.value));
+      drive.connect(shaper).connect(gain).connect(analyser).connect(ctx.destination);
+    }
+  }));
+  [els.freq, els.fine, els.spread].forEach(el => el.addEventListener('input', () => ctx && setFrequencies()));
+
+  document.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => runPreset(b.dataset.preset)));
+  document.querySelectorAll('[data-note]').forEach(b => b.addEventListener('click', () => {
+    els.freq.value = Number(b.dataset.note);
+    ctx && setFrequencies();
+  }));
+
+  // Cleanup on page hide to save battery
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+  window.addEventListener('beforeunload', stop);
+  </script>
+</body>
+</html>

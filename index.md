@@ -1,37 +1,24 @@
-## Welcome to GitHub Pages
+---
+title: "Kai Jones — Android & IT Infrastructure"
+layout: default
+---
 
-You can use the [editor on GitHub](https://github.com/488315/488315.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+# Kai Jones
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Android settings and kernel tinkerer. MD3 experiments. Storage, camera actuators, and performance work.
 
-### Markdown
+- **GitHub:** [@488315](https://github.com/488315)
+- **Location:** Las Vegas, NV
+- **Focus:** Android Development and IT
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Labs
 
-```markdown
-Syntax highlighted code block
+### MD3 Tone Generator
 
-# Header 1
-## Header 2
-### Header 3
+Launch the full app:
 
-- Bulleted
-- List
+[▶ Open Tone Generator](/tone.html)
 
-1. Numbered
-2. List
+## Contact
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/488315/488315.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Open an issue on this repo or ping me on GitHub.
