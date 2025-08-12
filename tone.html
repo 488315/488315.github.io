@@ -1,7 +1,8 @@
 <!-- tone.html
      Standalone Tone Generator app for GitHub Pages.
-     Place this file at the repo root next to index.md.
-     This version adds a text input for custom frequency values (e.g., 440, 1k, 15.6k).
+     Background playback toggle + virtual spatialization (HRTF).
+     Note: Browsers do not expose Dolby Atmos encoding/passthrough to Web Audio.
+           The "Atmos-style" switch here is virtual headphone spatialization.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -220,13 +221,19 @@
                     </label>
                     <label>
                         <span>Master gain</span>
-                        <input id="gain" type="range" min="0" max="2" step="0.01" value="0.2" />
+                        <div style="display:flex;align-items:center;gap:8px">
+                            <input id="gain" type="range" min="0" max="2" step="0.01" value="0.2" />
+                            <output id="gainVal">0.2</output>
+                        </div>
                     </label>
                 </div>
                 <div class="row">
                     <label>
                         <span>Frequency (Hz)</span>
-                        <input id="freq" type="range" min="20" max="20000" step="1" value="440" />
+                        <div style="display:flex;align-items:center;gap:8px">
+                            <input id="freq" type="range" min="20" max="20000" step="1" value="440" />
+                            <output id="freqVal">440</output>
+                        </div>
                         <div class="hzline">
                             <input id="freqInput" type="text" inputmode="decimal" placeholder="e.g. 440, 1k, 15.6k"
                                 aria-label="Frequency in hertz" />
@@ -235,17 +242,42 @@
                     </label>
                     <label>
                         <span>Fine tune</span>
-                        <input id="fine" type="range" min="-100" max="100" step="0.1" value="0" />
+                        <div style="display:flex;align-items:center;gap:8px">
+                            <input id="fine" type="range" min="-100" max="100" step="0.1" value="0" />
+                            <output id="fineVal">0</output>
+                        </div>
                     </label>
                 </div>
                 <div class="row">
                     <label>
                         <span>Overdrive</span>
-                        <input id="drive" type="range" min="0" max="1" step="0.01" value="0" />
+                        <div style="display:flex;align-items:center;gap:8px">
+                            <input id="drive" type="range" min="0" max="1" step="0.01" value="0" />
+                            <output id="driveVal">0</output>
+                        </div>
                     </label>
                     <label>
                         <span>Stereo spread (cents)</span>
-                        <input id="spread" type="range" min="0" max="50" step="1" value="0" />
+                        <div style="display:flex;align-items:center;gap:8px">
+                            <input id="spread" type="range" min="0" max="50" step="1" value="0" />
+                            <output id="spreadVal">0</output>
+                        </div>
+                    </label>
+                </div>
+                <div class="row">
+                    <label>
+                        <span>Background playback</span>
+                        <div style="display:flex;align-items:center;gap:8px">
+                            <input id="bg" type="checkbox" checked />
+                            <small class="muted">Keep playing when tab is hidden</small>
+                        </div>
+                    </label>
+                    <label>
+                        <span>Atmos‑style spatialization (virtual)</span>
+                        <div style="display:flex;align-items:center;gap:8px">
+                            <input id="spatial" type="checkbox" />
+                            <small class="muted">HRTF for headphones. Not true Dolby Atmos passthrough.</small>
+                        </div>
                     </label>
                 </div>
                 <div class="row full">
@@ -302,46 +334,66 @@
             stop: document.getElementById('stop'),
             scope: document.getElementById('scope'),
             freqInput: document.getElementById('freqInput'),
+            bg: document.getElementById('bg'),
+            spatial: document.getElementById('spatial'),
         };
 
-        let ctx, oscL, oscR, gain, analyser, drive, shaper, merger, rafId, sweepId;
-        const state = { running: false };
+        let ctx, oscL, oscR, gain, analyser, drive, shaper, panner, spatialGain, rafId, sweepId;
         function centsToRatio(c) { return Math.pow(2, c / 1200); }
         function makeShaper(amount) {
             const ws = new WaveShaperNode(ctx, { oversample: '4x' });
-            const k = amount * 1000 + 0.0001;
-            const n = 44100; const curve = new Float32Array(n);
+            const k = amount * 1000 + 0.0001; const n = 44100; const curve = new Float32Array(n);
             for (let i = 0; i < n; i++) { const x = i / n * 2 - 1; curve[i] = (1 + k) * x / (1 + k * Math.abs(x)); }
             ws.curve = curve; return ws;
         }
+
         function ensureContext() {
             if (ctx) return;
             ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
             oscL = new OscillatorNode(ctx, { type: els.waveform.value, frequency: Number(els.freq.value) });
             oscR = new OscillatorNode(ctx, { type: els.waveform.value, frequency: Number(els.freq.value) });
-            const splitter = new ChannelSplitterNode(ctx, { numberOfOutputs: 2 });
-            merger = new ChannelMergerNode(ctx, { numberOfInputs: 2 });
             gain = new GainNode(ctx, { gain: Number(els.gain.value) });
             drive = new GainNode(ctx, { gain: 1 });
             shaper = makeShaper(Number(els.drive.value));
+            panner = new PannerNode(ctx, { panningModel: 'HRTF', distanceModel: 'inverse', positionX: 0, positionY: 0, positionZ: -0.6 });
+            spatialGain = new GainNode(ctx, { gain: 1 });
             analyser = new AnalyserNode(ctx, { fftSize: 2048, smoothingTimeConstant: 0.06 });
-            oscL.connect(drive).connect(shaper).connect(gain).connect(analyser).connect(ctx.destination);
-            oscR.connect(drive).connect(shaper);
-            const lGain = new GainNode(ctx, { gain: 1 });
-            const rGain = new GainNode(ctx, { gain: 1 });
-            drive.connect(lGain).connect(merger, 0, 0);
-            drive.connect(rGain).connect(merger, 0, 1);
-            merger.connect(shaper);
+
+            // Sum both oscillators into the same chain
+            oscL.connect(drive); oscR.connect(drive);
+            rebuildGraph();
+
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({ title: 'Tone Generator' });
                 navigator.mediaSession.setActionHandler('play', start);
-                navigator.mediaSession.setActionHandler('pause', stop);
+                navigator.mediaSession.setActionHandler('pause', pause);
+                navigator.mediaSession.setActionHandler('stop', stop);
                 navigator.mediaSession.playbackState = 'paused';
             }
+
             const resume = () => ctx.state === 'suspended' && ctx.resume();
             window.addEventListener('click', resume, { once: true });
             window.addEventListener('touchstart', resume, { once: true, passive: true });
         }
+
+        function rebuildGraph() {
+            try { drive.disconnect(); shaper.disconnect(); gain.disconnect(); panner.disconnect(); spatialGain.disconnect(); } catch (e) { }
+
+            if (els.spatial && els.spatial.checked) {
+                // drive -> shaper -> panner(HRTF) -> spatialGain -> gain -> analyser -> destination
+                drive.connect(shaper);
+                shaper.connect(panner);
+                panner.connect(spatialGain);
+                spatialGain.connect(gain);
+            } else {
+                // drive -> shaper -> gain
+                drive.connect(shaper);
+                shaper.connect(gain);
+            }
+            gain.connect(analyser);
+            analyser.connect(ctx.destination);
+        }
+
         function setFrequencies() {
             const base = Number(els.freq.value);
             const fine = Number(els.fine.value);
@@ -351,34 +403,43 @@
             oscL.frequency.setTargetAtTime(left, ctx.currentTime, 0.01);
             oscR.frequency.setTargetAtTime(right, ctx.currentTime, 0.01);
         }
+
         function start() {
             ensureContext(); setFrequencies();
             oscL.type = oscR.type = els.waveform.value;
-            shaper.disconnect(); shaper = makeShaper(Number(els.drive.value));
-            drive.connect(shaper).connect(gain).connect(analyser).connect(ctx.destination);
-            if (state.running) return; oscL.start(); oscR.start(); state.running = true;
-            els.toggle.textContent = 'Pause'; navigator.mediaSession && (navigator.mediaSession.playbackState = 'playing');
+            shaper = makeShaper(Number(els.drive.value));
+            rebuildGraph();
+            if (oscL.numberOfInputs === 0) oscL.start();
+            if (oscR.numberOfInputs === 0) oscR.start();
+            els.toggle.textContent = 'Pause';
+            if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
             draw();
         }
+
         function pause() {
-            if (!state.running) return; ctx.suspend(); state.running = false; els.toggle.textContent = 'Resume';
-            navigator.mediaSession && (navigator.mediaSession.playbackState = 'paused'); cancelAnimationFrame(rafId);
-            if (sweepId) cancelAnimationFrame(sweepId);
-        }
-        function stop() {
-            if (!ctx) return; try { oscL.stop(); oscR.stop(); } catch (e) { }
+            if (!ctx) return; ctx.suspend();
+            els.toggle.textContent = 'Resume';
+            if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
             cancelAnimationFrame(rafId); if (sweepId) cancelAnimationFrame(sweepId);
-            ctx.close(); ctx = oscL = oscR = gain = analyser = drive = shaper = merger = null;
-            state.running = false; els.toggle.textContent = 'Start';
-            navigator.mediaSession && (navigator.mediaSession.playbackState = 'none');
         }
+
+        function stop() {
+            if (!ctx) return;
+            try { oscL.stop(); oscR.stop(); } catch (e) { }
+            cancelAnimationFrame(rafId); if (sweepId) cancelAnimationFrame(sweepId);
+            ctx.close(); ctx = null;
+            els.toggle.textContent = 'Start';
+            if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'none';
+        }
+
         function draw() {
             const canvas = els.scope; const dpr = Math.min(window.devicePixelRatio || 1, 2);
             const W = canvas.clientWidth * dpr; const H = canvas.clientHeight * dpr;
             if (canvas.width !== W) canvas.width = W; if (canvas.height !== H) canvas.height = H;
             const g = canvas.getContext('2d'); const buffer = new Uint8Array(analyser.fftSize);
             const render = () => {
-                rafId = requestAnimationFrame(render); analyser.getByteTimeDomainData(buffer);
+                rafId = requestAnimationFrame(render);
+                analyser.getByteTimeDomainData(buffer);
                 g.globalCompositeOperation = 'source-over'; g.fillStyle = 'rgba(0,0,0,0.15)'; g.fillRect(0, 0, W, H);
                 g.strokeStyle = 'rgba(92,242,92,0.08)'; g.lineWidth = 1;
                 for (let x = 0; x < W; x += Math.floor(W / 10)) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, H); g.stroke(); }
@@ -391,57 +452,56 @@
                 g.stroke();
             }; render();
         }
+
+        const parseFreq = (raw) => {
+            if (!raw) return NaN; const s = String(raw).trim().toLowerCase().replace(/hz$/, '');
+            const m = s.match(/^([0-9]*\.?[0-9]+)\s*(k|khz)?$/); if (!m) return NaN; let v = parseFloat(m[1]); if (m[2]) v *= 1000; return v;
+        };
+        const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+        const applyFreqInput = () => { const v = parseFreq(els.freqInput.value); if (Number.isNaN(v)) { els.freqInput.style.outline = '2px solid #ff6464'; return; } els.freqInput.style.outline = ''; const c = clamp(v, 20, 20000); els.freq.value = c; if (ctx) setFrequencies(); };
+
+        els.toggle.addEventListener('click', () => { if (!ctx || ctx.state === 'suspended') return start(); pause(); });
+        els.stop.addEventListener('click', stop);
+        [els.waveform, els.gain, els.drive].forEach(el => el.addEventListener('input', () => {
+            if (!ctx) return;
+            if (el === els.gain) gain.gain.value = Number(el.value);
+            if (el === els.waveform) { oscL.type = oscR.type = el.value; }
+            if (el === els.drive) { shaper = makeShaper(Number(el.value)); rebuildGraph(); }
+        }));
+        els.spatial.addEventListener('change', () => ctx && rebuildGraph());
+        [els.freq, els.fine, els.spread].forEach(el => el.addEventListener('input', () => { if (ctx) setFrequencies(); if (el === els.freq) els.freqInput.value = els.freq.value; }));
+        document.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => runPreset(b.dataset.preset)));
+        document.querySelectorAll('[data-note]').forEach(b => b.addEventListener('click', () => { els.freq.value = Number(b.dataset.note); els.freqInput.value = els.freq.value; ctx && setFrequencies(); }));
+        els.freqInput.addEventListener('change', applyFreqInput);
+        els.freqInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyFreqInput(); } });
+        document.addEventListener('visibilitychange', () => { if (document.hidden && !els.bg.checked) pause(); });
+        window.addEventListener('beforeunload', stop);
+
+        // Presets
+        // let sweepId; // Removed duplicate declaration
         const runPreset = (name) => {
             switch (name) {
                 case 'hum60': els.waveform.value = 'sawtooth'; els.freq.value = 60; els.fine.value = 0; els.drive.value = 0.15; els.gain.value = 0.25; els.spread.value = 0; start(); break;
                 case 'hum50': els.waveform.value = 'sawtooth'; els.freq.value = 50; els.fine.value = 0; els.drive.value = 0.2; els.gain.value = 0.25; els.spread.value = 0; start(); break;
-                case 'sweep': start(); const t0 = performance.now(); const dur = 8000; const sweep = () => {
-                    const t = performance.now() - t0; const k = Math.min(t / dur, 1); const f = 20 * Math.pow(1000, k);
-                    els.freq.value = Math.min(20000, f).toFixed(2); setFrequencies(); if (k < 1) sweepId = requestAnimationFrame(sweep);
-                }; sweep(); break;
+                case 'sweep': start(); const t0 = performance.now(); const dur = 8000; const sweep = () => { const t = performance.now() - t0; const k = Math.min(t / dur, 1); const f = 20 * Math.pow(1000, k); els.freq.value = Math.min(20000, f).toFixed(2); setFrequencies(); if (k < 1) sweepId = requestAnimationFrame(sweep); }; sweep(); break;
                 case 'binaural': els.waveform.value = 'sine'; els.freq.value = 440; els.fine.value = 0; els.spread.value = 15; els.drive.value = 0; els.gain.value = 0.2; start(); break;
             }
         };
-        els.toggle.addEventListener('click', () => { if (!ctx || ctx.state === 'suspended') return start(); pause(); });
-        els.stop.addEventListener('click', stop);
-        [els.waveform, els.gain, els.drive].forEach(el => el.addEventListener('input', () => {
-            if (!ctx) return; if (el === els.gain) gain.gain.value = Number(el.value);
-            if (el === els.waveform) { oscL.type = oscR.type = el.value; }
-            if (el === els.drive) {
-                shaper.disconnect(); shaper = makeShaper(Number(el.value));
-                drive.connect(shaper).connect(gain).connect(analyser).connect(ctx.destination);
-            }
-        }));
-        [els.freq, els.fine, els.spread].forEach(el => el.addEventListener('input', () => { if (ctx) setFrequencies(); if (el === els.freq) els.freqInput.value = els.freq.value; }));
-        document.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => runPreset(b.dataset.preset)));
-        document.querySelectorAll('[data-note]').forEach(b => b.addEventListener('click', () => { els.freq.value = Number(b.dataset.note); els.freqInput.value = els.freq.value; ctx && setFrequencies(); }));
-        document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
-        window.addEventListener('beforeunload', stop);
 
-        // User-entered frequency parsing and validation
-        const parseFreq = (raw) => {
-            if (!raw) return NaN;
-            const s = String(raw).trim().toLowerCase().replace(/hz$/, '');
-            // support suffix k/khz
-            const m = s.match(/^([0-9]*\.?[0-9]+)\s*(k|khz)?$/);
-            if (!m) return NaN;
-            let v = parseFloat(m[1]);
-            if (m[2]) v *= 1000;
-            return v;
-        };
-        const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-        const applyFreqInput = () => {
-            const v = parseFreq(els.freqInput.value);
-            if (Number.isNaN(v)) { els.freqInput.style.outline = '2px solid #ff6464'; return; }
-            els.freqInput.style.outline = '';
-            const clamped = clamp(v, 20, 20000);
-            els.freq.value = clamped;
-            if (ctx) setFrequencies();
-        };
-        els.freqInput.addEventListener('change', applyFreqInput);
-        els.freqInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyFreqInput(); } });
-        // Initialize text box with slider value
-        els.freqInput.value = els.freq.value;
+        // Init input state
+        document.addEventListener('DOMContentLoaded', () => {
+            els.freqInput.value = els.freq.value;
+            [els.gain, els.freq, els.fine, els.drive, els.spread].forEach(el => {
+                const labelId = el.id + 'Val';
+                document.getElementById(labelId).textContent = el.value;
+            });
+        });
+        [els.gain, els.freq, els.fine, els.drive, els.spread].forEach(el => {
+            el.addEventListener('input', () => {
+                const labelId = el.id + 'Val';
+                document.getElementById(labelId).textContent = el.value;
+            });
+        });
     </script>
 </body>
 
