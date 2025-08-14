@@ -103,6 +103,59 @@
             gap: 4px;
         }
 
+        .status-time {
+            font-weight: 600;
+        }
+
+        .status-signal {
+            width: 16px;
+            height: 12px;
+            background: var(--md3-on-background);
+            border-radius: 1px;
+            position: relative;
+        }
+
+        .status-signal::before {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: 2px;
+            width: 2px;
+            height: 8px;
+            background: var(--md3-on-background);
+            border-radius: 1px;
+        }
+
+        .status-battery {
+            width: 20px;
+            height: 10px;
+            border: 1px solid var(--md3-on-background);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .status-battery::after {
+            content: '';
+            position: absolute;
+            right: -3px;
+            top: 2px;
+            width: 2px;
+            height: 6px;
+            background: var(--md3-on-background);
+            border-radius: 0 1px 1px 0;
+        }
+
+        .status-battery::before {
+            content: '';
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 14px;
+            height: 6px;
+            background: var(--md3-on-background);
+            border-radius: 1px;
+        }
+
         /* Top App Bar */
         .top-app-bar {
             height: 64px;
@@ -133,12 +186,14 @@
             color: var(--md3-on-surface);
             font-family: inherit;
             transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: var(--md3-elevation-1);
         }
 
         .search-field:focus {
             outline: none;
             background: var(--md3-primary-container);
             color: var(--md3-on-primary-container);
+            box-shadow: var(--md3-elevation-2);
         }
 
         .search-field::placeholder {
@@ -182,6 +237,10 @@
             color: var(--md3-on-primary-container);
         }
 
+        .search-icon-btn:active {
+            transform: scale(0.95);
+        }
+
         .user-avatar {
             width: 32px;
             height: 32px;
@@ -194,12 +253,19 @@
             align-items: center;
             justify-content: center;
             font-weight: 500;
+            font-size: 14px;
             transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: var(--md3-elevation-1);
         }
 
         .user-avatar:hover {
             background: var(--md3-primary-container);
             color: var(--md3-on-primary-container);
+            box-shadow: var(--md3-elevation-2);
+        }
+
+        .user-avatar:active {
+            transform: scale(0.95);
         }
 
         /* Quick Action Buttons */
@@ -210,6 +276,12 @@
             overflow-x: auto;
             background: var(--md3-surface);
             border-bottom: 1px solid var(--md3-outline-variant);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .quick-actions::-webkit-scrollbar {
+            display: none;
         }
 
         .quick-action-btn {
@@ -226,6 +298,27 @@
             transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
             min-width: 64px;
             white-space: nowrap;
+            box-shadow: var(--md3-elevation-1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-action-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .quick-action-btn:hover::before {
+            width: 100%;
+            height: 100%;
         }
 
         .quick-action-btn:hover {
@@ -235,13 +328,22 @@
             box-shadow: var(--md3-elevation-2);
         }
 
+        .quick-action-btn:active {
+            transform: translateY(0);
+            box-shadow: var(--md3-elevation-1);
+        }
+
         .quick-action-btn .material-icons {
             font-size: 24px;
+            position: relative;
+            z-index: 1;
         }
 
         .quick-action-btn span {
             font-size: var(--md3-label-small);
             font-weight: 500;
+            position: relative;
+            z-index: 1;
         }
 
         /* Map Container */
@@ -301,6 +403,19 @@
             height: 20px;
             box-shadow: var(--md3-elevation-2);
             animation: pulse 2s infinite;
+            position: relative;
+        }
+
+        .current-location-marker::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: var(--md3-on-primary);
+            border-radius: 50%;
         }
 
         @keyframes pulse {
@@ -316,6 +431,24 @@
                 transform: scale(1);
                 opacity: 1;
             }
+        }
+
+        /* POI Markers */
+        .poi-marker {
+            background: var(--md3-primary);
+            color: var(--md3-on-primary);
+            border: 2px solid var(--md3-surface);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--md3-elevation-2);
+            transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .poi-marker:hover {
+            transform: scale(1.1);
+            box-shadow: var(--md3-elevation-3);
         }
 
         /* Bottom Navigation */
@@ -400,11 +533,24 @@
             transform: translateY(0);
         }
 
+        .poi-modal::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 4px;
+            background: var(--md3-outline-variant);
+            border-radius: 2px;
+        }
+
         .poi-header {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 16px;
+            margin-top: 16px;
         }
 
         .poi-icon {
@@ -416,6 +562,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: var(--md3-elevation-1);
+        }
+
+        .poi-icon .material-icons {
+            font-size: 24px;
+        }
+
+        .poi-info {
+            flex: 1;
         }
 
         .poi-info h3 {
@@ -428,6 +583,20 @@
         .poi-info p {
             font-size: var(--md3-body-medium);
             color: var(--md3-on-surface-variant);
+            margin-bottom: 8px;
+        }
+
+        .poi-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: var(--md3-body-small);
+            color: var(--md3-on-surface-variant);
+        }
+
+        .poi-rating .material-icons {
+            font-size: 16px;
+            color: var(--md3-primary);
         }
 
         .poi-actions {
@@ -446,11 +615,25 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: var(--md3-elevation-1);
         }
 
         .poi-action-btn:hover {
             background: var(--md3-primary-container);
             color: var(--md3-on-primary-container);
+            box-shadow: var(--md3-elevation-2);
+        }
+
+        .poi-action-btn:active {
+            transform: scale(0.98);
+        }
+
+        .poi-action-btn .material-icons {
+            font-size: 18px;
         }
 
         /* Responsive Design */
@@ -519,11 +702,11 @@
         <!-- Status Bar -->
         <div class="status-bar">
             <div class="status-left">
-                <span>9:41</span>
+                <span class="status-time">9:41</span>
             </div>
             <div class="status-right">
-                <span>📶</span>
-                <span>🔋</span>
+                <div class="status-signal"></div>
+                <div class="status-battery"></div>
             </div>
         </div>
 
@@ -618,6 +801,11 @@
             <div class="poi-info">
                 <h3 id="poiName">Location Name</h3>
                 <p id="poiCategory">Category</p>
+                <div class="poi-rating">
+                    <span class="material-icons">star</span>
+                    <span id="poiRating">4.5</span>
+                    <span id="poiReviews">(128 reviews)</span>
+                </div>
             </div>
         </div>
         <div class="poi-actions">
@@ -790,21 +978,24 @@
             addSamplePOIs() {
                 // Add sample POIs around the map
                 const samplePOIs = [
-                    { lat: 40.7128, lng: -74.0060, name: 'Times Square', category: 'attraction', icon: 'attractions' },
-                    { lat: 40.7589, lng: -73.9851, name: 'Central Park', category: 'park', icon: 'park' },
-                    { lat: 40.7484, lng: -73.9857, name: 'Empire State Building', category: 'attraction', icon: 'attractions' },
-                    { lat: 40.7527, lng: -73.9772, name: 'Grand Central Terminal', category: 'transport', icon: 'train' },
-                    { lat: 40.7505, lng: -73.9934, name: 'Vons Supermarket', category: 'shopping', icon: 'shopping_cart' },
-                    { lat: 40.7510, lng: -73.9930, name: 'Great Clips', category: 'service', icon: 'content_cut' },
-                    { lat: 40.7520, lng: -73.9925, name: 'Public School 123', category: 'education', icon: 'school' }
+                    { lat: 40.7128, lng: -74.0060, name: 'Times Square', category: 'Tourist Attraction', icon: 'attractions', rating: 4.3, reviews: 45.2 },
+                    { lat: 40.7589, lng: -73.9851, name: 'Central Park', category: 'Public Park', icon: 'park', rating: 4.8, reviews: 89.1 },
+                    { lat: 40.7484, lng: -73.9857, name: 'Empire State Building', category: 'Tourist Attraction', icon: 'attractions', rating: 4.4, reviews: 67.8 },
+                    { lat: 40.7527, lng: -73.9772, name: 'Grand Central Terminal', category: 'Transportation Hub', icon: 'train', rating: 4.6, reviews: 23.4 },
+                    { lat: 40.7505, lng: -73.9934, name: 'Vons Supermarket', category: 'Grocery Store', icon: 'shopping_cart', rating: 4.1, reviews: 12.7 },
+                    { lat: 40.7510, lng: -73.9930, name: 'Great Clips', category: 'Hair Salon', icon: 'content_cut', rating: 4.2, reviews: 8.9 },
+                    { lat: 40.7520, lng: -73.9925, name: 'Public School 123', category: 'Elementary School', icon: 'school', rating: 4.0, reviews: 15.3 },
+                    { lat: 40.7530, lng: -73.9915, name: 'Starbucks', category: 'Coffee Shop', icon: 'local_cafe', rating: 4.5, reviews: 34.6 },
+                    { lat: 40.7540, lng: -73.9905, name: 'Shell Gas Station', category: 'Gas Station', icon: 'local_gas_station', rating: 3.8, reviews: 5.2 },
+                    { lat: 40.7550, lng: -73.9895, name: 'McDonald\'s', category: 'Fast Food Restaurant', icon: 'restaurant', rating: 3.9, reviews: 28.4 }
                 ];
 
                 samplePOIs.forEach(poi => {
-                    this.addPOIMarker([poi.lat, poi.lng], poi.name, poi.category, poi.icon);
+                    this.addPOIMarker([poi.lat, poi.lng], poi.name, poi.category, poi.icon, poi.rating, poi.reviews);
                 });
             }
 
-            addPOIMarker(latlng, name, category, icon = 'place') {
+            addPOIMarker(latlng, name, category, icon = 'place', rating = 4.0, reviews = 10) {
                 const marker = L.marker(latlng, {
                     icon: L.divIcon({
                         className: 'poi-marker',
@@ -822,16 +1013,18 @@
                 });
 
                 marker.on('click', () => {
-                    this.showPOIModal(name, category, icon);
+                    this.showPOIModal(name, category, icon, rating, reviews);
                 });
 
                 this.poiMarkers.push(marker);
             }
 
-            showPOIModal(name, category, icon) {
+            showPOIModal(name, category, icon, rating = 4.0, reviews = 10) {
                 document.getElementById('poiName').textContent = name;
                 document.getElementById('poiCategory').textContent = category;
                 document.getElementById('poiIcon').textContent = icon;
+                document.getElementById('poiRating').textContent = rating;
+                document.getElementById('poiReviews').textContent = `(${reviews}k reviews)`;
                 
                 const modal = document.getElementById('poiModal');
                 modal.classList.add('show');
@@ -852,16 +1045,30 @@
                     more: 'more_horiz'
                 };
 
-                this.showNotification(`Searching for ${category}...`, 'info');
+                const categoryNames = {
+                    home: 'Home',
+                    restaurant: 'Restaurants',
+                    cafe: 'Coffee Shops',
+                    gas: 'Gas Stations',
+                    shopping: 'Shopping',
+                    more: 'More Options'
+                };
+
+                this.showNotification(`Searching for ${categoryNames[category]}...`, 'info');
                 
                 // Simulate search for category
                 setTimeout(() => {
+                    const baseLat = this.currentLocation?.[0] || 40.7128;
+                    const baseLng = this.currentLocation?.[1] || -74.0060;
+                    
                     this.addPOIMarker(
-                        [this.currentLocation?.[0] + (Math.random() - 0.5) * 0.01, 
-                         this.currentLocation?.[1] + (Math.random() - 0.5) * 0.01],
-                        `${category.charAt(0).toUpperCase() + category.slice(1)} nearby`,
-                        category,
-                        categoryIcons[category]
+                        [baseLat + (Math.random() - 0.5) * 0.01, 
+                         baseLng + (Math.random() - 0.5) * 0.01],
+                        `${categoryNames[category]} nearby`,
+                        categoryNames[category],
+                        categoryIcons[category],
+                        4.0 + Math.random() * 0.5,
+                        5 + Math.random() * 50
                     );
                 }, 1000);
             }
