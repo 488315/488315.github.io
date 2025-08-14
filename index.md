@@ -102,3 +102,9 @@ A beautiful, responsive HTML drop-in component that combines Google Maps API wit
 - OpenStreetMap for map tiles and data
 - Material Design 3 for expressive UI design
 - Vanilla JavaScript for interactivity
+
+### MD3 Google Maps UI Replica
+
+[Open MD3 Google Maps UI Replica](/gmaps-md3.html)
+
+A Google Maps–inspired interface powered by OpenStreetMap tiles and styled with Material Design 3.
