@@ -82,3 +82,23 @@ Known for leading high-performing teams and fostering a collaborative, growth-or
 
 [Open Tone Generator](/tone.html)
 [Open Systemui](/systemui.html)
+
+### MD3 OpenStreetMap Component
+
+[Open MD3 OpenStreetMap Component](/md3-osm-map.html)
+
+A beautiful, responsive HTML drop-in component that combines Google Maps API with OpenStreetMap data, styled with Material Design 3 expressive design principles.
+
+**Features:**
+- Complete MD3 color system with light/dark mode support
+- Interactive map with multiple tile layers (Street, Satellite, Terrain)
+- Location search with geocoding via Nominatim
+- Current location detection and click-to-add markers
+- Responsive design with smooth animations
+- Fullscreen mode and zoom controls
+
+**Tech Stack:**
+- Leaflet.js for map functionality
+- OpenStreetMap for map tiles and data
+- Material Design 3 for expressive UI design
+- Vanilla JavaScript for interactivity
