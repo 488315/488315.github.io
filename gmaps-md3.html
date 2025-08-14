@@ -13,11 +13,15 @@
       height: 100%;
       margin: 0;
     }
+    #root {
+      position: relative;
+    }
     #map {
       position: absolute;
       top: 104px; /* app bar + buttons approx */
       bottom: 56px; /* bottom nav */
       width: 100%;
+      z-index: 0;
     }
     .quick-actions {
       position: absolute;
@@ -42,7 +46,6 @@
 </head>
 <body>
   <div id="root"></div>
-  <div id="map"></div>
   <!-- React and MUI -->
   <script type="module">
     import React, { useState, useEffect } from 'https://esm.sh/react@18';
@@ -139,7 +142,7 @@
             .addTo(map);
         });
       }, []);
-      return null;
+      return <Box id="map" />;
     }
 
     function FloatingButtons() {
@@ -197,8 +200,8 @@
               </IconButton>
             </Toolbar>
           </AppBar>
-          <QuickButtons />
           <MapComponent />
+          <QuickButtons />
           <FloatingButtons />
           <BottomNav />
         </ThemeProvider>
