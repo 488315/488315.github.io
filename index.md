@@ -5,7 +5,7 @@ layout: default
 
 # Kai Jones
 
-IT Technician | Troubleshooting | Network Support | System Administration  
+Self-Employed IT Contractor | Infrastructure, Network Security & Systems Support  
 Las Vegas, Nevada, United States
 
 ## Contact
@@ -15,8 +15,7 @@ Las Vegas, Nevada, United States
 
 ## Summary
 
-Dedicated IT professional with 4+ years of experience in system administration, network support, and troubleshooting. Skilled in building and maintaining desktops, laptops, servers, and networks. Experienced with multiple OS platforms and application stacks, and adept at implementing secure wired and wireless networks.  
-Known for leading high-performing teams and fostering a collaborative, growth-oriented environment. Holds multiple IT certifications and remains committed to continuous learning.
+Independent IT contractor with 4+ years delivering secure, reliable infrastructure and support for businesses in hospitality, retail, and corporate environments. Skilled in system administration, network troubleshooting, and endpoint security across multi-platform environments.
 
 ## Skills
 
@@ -73,38 +72,3 @@ Known for leading high-performing teams and fostering a collaborative, growth-or
 
 - **AAS, Computer Systems Networking & Telecommunications** — College of Southern Nevada (2018–2021)  
 - **Advanced Diploma, Computer Science** — Liberty High School (2014–2018)
-
----
-
-## Labs
-
-### MD3 Tone Generator
-
-[Open Tone Generator](/tone.html)
-[Open Systemui](/systemui.html)
-
-### MD3 OpenStreetMap Component
-
-[Open MD3 OpenStreetMap Component](/md3-osm-map.html)
-
-A beautiful, responsive HTML drop-in component that combines Google Maps API with OpenStreetMap data, styled with Material Design 3 expressive design principles.
-
-**Features:**
-- Complete MD3 color system with light/dark mode support
-- Interactive map with multiple tile layers (Street, Satellite, Terrain)
-- Location search with geocoding via Nominatim
-- Current location detection and click-to-add markers
-- Responsive design with smooth animations
-- Fullscreen mode and zoom controls
-
-**Tech Stack:**
-- Leaflet.js for map functionality
-- OpenStreetMap for map tiles and data
-- Material Design 3 for expressive UI design
-- Vanilla JavaScript for interactivity
-
-### MD3 Google Maps UI Replica
-
-[Open MD3 Google Maps UI Replica](/gmaps-md3.html)
-
-A Google Maps–inspired interface powered by OpenStreetMap tiles and styled with Material Design 3.
