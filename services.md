@@ -3,144 +3,66 @@ title: "Services — Kai’s Tech Services"
 layout: default
 ---
 
-# Services
+<nav class="site-nav">
+  <a class="brand-mark" href="/"><span class="logo-dot">KJ</span><span>Kai’s Tech Services</span></a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="mailto:kvjones0243@gmail.com">Email</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdyKiftIgcJzweKwpwo3SDnVfIdkEDmz1z0zy9CWlV2RoB0sg/viewform?usp=dialog">Request Support</a>
+  </div>
+</nav>
 
-**Remote-first IT support that's fast, secure, and straightforward.**
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">Services & pricing</span>
+    <h1>Clear options for quick fixes, safer devices, and small-business support.</h1>
+    <p class="lede">Choose a session or setup package, then submit the intake form so I can confirm scope and schedule the right remote support window.</p>
+    <div class="hero-actions">
+      <a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLSdyKiftIgcJzweKwpwo3SDnVfIdkEDmz1z0zy9CWlV2RoB0sg/viewform?usp=dialog">Request Support</a>
+      <a class="secondary-button" href="mailto:kvjones0243@gmail.com">Ask a Question</a>
+    </div>
+  </div>
+  <aside class="hero-card">
+    <span class="status-pill">Remote-first support</span>
+    <h2>Best fit for Windows PCs, home Wi‑Fi, Microsoft 365, printers, and account security.</h2>
+    <p>Payment is collected before the session begins, and every appointment includes a written summary.</p>
+  </aside>
+</section>
 
-Kai's Tech Services helps individuals and small businesses stay productive and protected. No confusing jargon. No surprise bills. Just clear solutions and honest communication.
+<section>
+  <span class="eyebrow">Most popular</span>
+  <h2>Session-based support</h2>
+  <div class="grid-2">
+    <article class="price-card"><h3>Quick Fix Session</h3><div class="price">$60 / 45 min</div><p>Best for slow PCs, Wi‑Fi issues, printer setup, email/login issues, app errors, and installations.</p><ul><li>Remote troubleshooting and resolution</li><li>Summary of what was fixed and why</li></ul></article>
+    <article class="price-card"><h3>Extended Fix Session</h3><div class="price">$90 / 90 min</div><p>Best for multiple issues, complex performance problems, device setup plus cleanup, or deeper Microsoft 365 issues.</p><ul><li>Complete troubleshooting session</li><li>Cleanup, configuration fixes, and next-step recommendations</li></ul></article>
+  </div>
+</section>
 
-**[→ Request Support (Intake Form)](https://docs.google.com/forms/d/e/1FAIpQLSdyKiftIgcJzweKwpwo3SDnVfIdkEDmz1z0zy9CWlV2RoB0sg/viewform?usp=dialog)**  
-**[Email: kvjones0243@gmail.com](mailto:kvjones0243@gmail.com)**
+<section>
+  <span class="eyebrow">Security & setup</span>
+  <h2>Flat-rate packages</h2>
+  <div class="grid-2">
+    <article class="price-card"><h3>Security Baseline Setup</h3><div class="price">From $120</div><p>MFA setup, Bitwarden password manager setup, browser cleanup, device-security recommendations, and one follow-up check-in.</p></article>
+    <article class="price-card"><h3>New Computer Setup</h3><div class="price">From $120</div><p>System updates, essential configuration, app setup, account sign-in, OneDrive or Google Drive backup, and a basic security walkthrough.</p></article>
+  </div>
+</section>
 
----
+<section>
+  <span class="eyebrow">Small business</span>
+  <h2>Hourly support for growing teams.</h2>
+  <div class="grid-2">
+    <article class="price-card"><h3>Microsoft 365 Help</h3><div class="price">$90–$150/hr</div><p>User setup/removal, MFA troubleshooting, Outlook configuration, security improvements, and admin best practices.</p></article>
+    <article class="price-card"><h3>Business Wi‑Fi & Network Support</h3><div class="price">$90–$150/hr</div><p>Wi‑Fi stability, mesh optimization, router configuration, VPN, and remote-connectivity troubleshooting.</p></article>
+  </div>
+</section>
 
-## Session-Based Support (Most Popular)
+<section class="grid-2">
+  <article class="panel"><h2>What I support</h2><ul><li>Windows PCs as the primary focus</li><li>Basic macOS and Android support</li><li>Home Wi‑Fi and small office networking</li><li>Microsoft 365 setup and troubleshooting</li><li>Printers and common peripherals</li><li>Hardware repair, including soldering and component-level repair</li></ul></article>
+  <article class="panel"><h2>Out of scope</h2><p>To maintain quality and focus on legitimate support, I do not assist with illegal or pirated software.</p><h3>Response time</h3><p>Email or submit the intake form — I respond within 24 hours.</p></article>
+</section>
 
-### Quick Fix Session
-**$60 / 45 minutes**
-
-Best for:
-- Slow PC troubleshooting
-- Wi-Fi or internet issues
-- Printer setup & problems
-- Email and login issues
-- App errors and installation help
-
-What's included:
-- Remote troubleshooting and resolution
-- Summary of what was fixed and why
-
----
-
-### Extended Fix Session
-**$90 / 90 minutes**
-
-Best for:
-- Multiple issues that need time
-- Complex performance problems
-- Device setup plus cleanup
-- Microsoft 365 account issues requiring deeper investigation
-
-What's included:
-- Complete troubleshooting session
-- System cleanup and configuration fixes
-- Next-step recommendations for ongoing stability
-
----
-
-## Security & Setup Services
-
-### Security Baseline Setup
-**Starting at $120 (flat rate)**
-
-Best for:
-- Account security upgrades
-- New device protection setup
-- Preventing hacks and lockouts
-
-What's included:
-- MFA setup (Google and Microsoft accounts)
-- Password manager setup (Bitwarden recommended)
-- Browser security hardening and cleanup
-- Device security recommendations
-- One follow-up check-in
-
----
-
-### New Computer Setup
-**Starting at $120 (flat rate)**
-
-Best for:
-- New laptop or desktop setup
-- Fresh OS installation and configuration
-- New device onboarding
-
-What's included:
-- System updates and essential configuration
-- Apps installed and configured
-- Account sign-in and verification
-- Backup setup (OneDrive or Google Drive)
-- Basic security walkthrough
-
----
-
-## Small Business IT Support
-
-### Microsoft 365 Help (Small Business)
-**$90–$150/hour (based on scope)**
-
-Common requests:
-- User account setup and removal
-- MFA and login troubleshooting
-- Email and Outlook configuration
-- Security improvements and audit
-- Admin best practices and guidance
-
----
-
-### Business Wi-Fi & Network Support
-**$90–$150/hour**
-
-Common requests:
-- Wi-Fi stability and performance issues
-- Mesh network setup and optimization
-- Router configuration and security
-- VPN and remote connectivity troubleshooting
-
----
-
-## What I Support
-
-- Windows PCs (primary focus)
-- Basic macOS support
-- Home Wi-Fi and small office networking
-- Microsoft 365 setup and troubleshooting
-- Printers and common peripherals
-- Android devices (basic support)
-- Hardware repair (soldering, component-level repair)
-
----
-
-## Out of Scope
-
-To maintain quality and focus on legitimate support, I don't assist with:
-- Illegal or pirated software
-
----
-
-## How It Works
-
-1. **Fill out the intake form** with details about your issue
-2. **I contact you** to confirm the scope and schedule a time
-3. **Payment is collected** before the session begins
-4. **Remote troubleshooting** — I remote in and solve the problem
-5. **You get a summary** with what was fixed and any next steps
-
-**→ [Request Support (Intake Form)](https://docs.google.com/forms/d/e/1FAIpQLSdyKiftIgcJzweKwpwo3SDnVfIdkEDmz1z0zy9CWlV2RoB0sg/viewform?usp=dialog)**
-
----
-
-## Have Questions?
-
-**Email:** [kvjones0243@gmail.com](mailto:kvjones0243@gmail.com)  
-**Or use the intake form above** — I respond within 24 hours
+<section class="cta-band">
+  <h2>Ready to schedule?</h2>
+  <p>Start with the intake form and I’ll follow up with scope, timing, and next steps.</p>
+  <a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLSdyKiftIgcJzweKwpwo3SDnVfIdkEDmz1z0zy9CWlV2RoB0sg/viewform?usp=dialog">Request Support</a>
+</section>

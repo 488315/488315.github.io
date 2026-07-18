@@ -3,90 +3,74 @@ title: "Kai’s Tech Services — Remote IT Support & Security"
 layout: default
 ---
 
-# Kai’s Tech Services
+<nav class="site-nav">
+  <a class="brand-mark" href="/"><span class="logo-dot">KJ</span><span>Kai’s Tech Services</span></a>
+  <div class="nav-links">
+    <a href="/services">Services</a>
+    <a href="mailto:kvjones0243@gmail.com">Email</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdyKiftIgcJzweKwpwo3SDnVfIdkEDmz1z0zy9CWlV2RoB0sg/viewform?usp=dialog">Request Support</a>
+  </div>
+</nav>
 
-**Remote IT Support • Security Setup • Microsoft 365 Help**  
-Las Vegas, NV (Remote-First)
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">Remote-first IT support • Las Vegas, NV</span>
+    <h1>Calm, secure tech help when your devices get loud.</h1>
+    <p class="lede">I help individuals and small businesses fix computer, Wi‑Fi, Microsoft 365, and account-security problems with plain-English support and clean documentation.</p>
+    <div class="hero-actions">
+      <a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLSdyKiftIgcJzweKwpwo3SDnVfIdkEDmz1z0zy9CWlV2RoB0sg/viewform?usp=dialog">Request Support</a>
+      <a class="secondary-button" href="/services">View Services</a>
+    </div>
+  </div>
+  <aside class="hero-card">
+    <div>
+      <span class="status-pill">Now booking remote sessions</span>
+      <h2>Fast fixes. Safer setups. Less stress.</h2>
+      <p>Every session focuses on the immediate issue, the root cause, and the next best prevention step.</p>
+    </div>
+    <ul>
+      <li>Quick response and clear communication</li>
+      <li>Security-first setup for accounts, devices, and Wi‑Fi</li>
+      <li>Session summary with next-step recommendations</li>
+    </ul>
+  </aside>
+</section>
 
-**I take care of your tech so you can focus on your life or business — without the stress.**
+<section>
+  <span class="eyebrow">What I do</span>
+  <h2>Practical support for the tech you use every day.</h2>
+  <p class="section-lede">No mystery fixes or confusing jargon — just focused troubleshooting, secure configuration, and guidance you can actually use.</p>
+  <div class="grid-3">
+    <article class="service-card"><div class="icon">🛠️</div><h3>Remote Troubleshooting</h3><p>Slow PCs, app errors, printer issues, email problems, and everyday device headaches.</p></article>
+    <article class="service-card"><div class="icon">🔐</div><h3>Security Setup</h3><p>MFA, password managers, browser cleanup, safe sign-in habits, and device hardening.</p></article>
+    <article class="service-card"><div class="icon">☁️</div><h3>Microsoft 365 Help</h3><p>Outlook, account access, admin basics, user setup, MFA issues, and email configuration.</p></article>
+  </div>
+</section>
 
-**Get Started:** [Request Support](https://docs.google.com/forms/d/e/1FAIpQLSdyKiftIgcJzweKwpwo3SDnVfIdkEDmz1z0zy9CWlV2RoB0sg/viewform?usp=dialog)  
-**Email:** [kvjones0243@gmail.com](mailto:kvjones0243@gmail.com)
+<section>
+  <span class="eyebrow">How support works</span>
+  <h2>A simple process from intake to resolution.</h2>
+  <div class="steps">
+    <div class="step"><strong>01</strong><p>Fill out the support form with your issue.</p></div>
+    <div class="step"><strong>02</strong><p>I review the details and confirm scope.</p></div>
+    <div class="step"><strong>03</strong><p>We schedule a secure remote session.</p></div>
+    <div class="step"><strong>04</strong><p>I troubleshoot, fix, and explain the changes.</p></div>
+    <div class="step"><strong>05</strong><p>You receive a summary and recommendations.</p></div>
+  </div>
+</section>
 
----
+<section class="grid-3">
+  <article class="promise"><h3>No Tech Talk</h3><p>I explain what changed in plain English so you know what happened and why.</p></article>
+  <article class="promise"><h3>No Pressure</h3><p>You will know the scope before work starts, with honest guidance for next steps.</p></article>
+  <article class="promise"><h3>Security First</h3><p>Fixing today’s problem matters. Preventing the next one matters even more.</p></article>
+</section>
 
-## 5-Star Support, Built on Real IT Experience
-
-I provide fast, clear, and professional tech support with a security-first mindset.
-No confusing jargon. No mystery fixes. Just clean results.
-
-**What you can expect:**
-- Quick response and clear communication
-- Remote-first troubleshooting (fast + efficient)
-- Secure setup practices (accounts, devices, and Wi-Fi)
-- Documentation and next steps after every session
-
----
-
-## IT Services & Support
-
-Simple, reliable services designed for real people and small businesses.
-
-### Managed Support (Lightweight)
-Keep your devices stable and protected with proactive checkups and maintenance.
-
-### Microsoft 365 Setup & Fixes
-Login issues, MFA, account cleanup, Outlook/email problems, and admin support.
-
-### Wi-Fi & Network Troubleshooting
-Slow internet, disconnects, router setup, mesh systems, and stability fixes.
-
-### Security & Account Protection
-MFA setup, password manager setup, safe browsing, device hardening.
-
-### PC Performance & Cleanup
-Slow PC fixes, startup cleanup, storage cleanup, updates, and optimization.
-
----
-
-## How Support Works
-
-Here’s the simple process:
-
-1. **You fill out the support form**
-2. **I review your issue and contact you**
-3. **We schedule a remote session**
-4. **I troubleshoot + fix the issue**
-5. **You get a clear summary + recommendations**
-
-**Start here:** [Request Support](https://docs.google.com/forms/d/e/1FAIpQLSdyKiftIgcJzweKwpwo3SDnVfIdkEDmz1z0zy9CWlV2RoB0sg/viewform?usp=dialog)
-
----
-
-## My Support Promise
-
-**No Tech Talk**  
-I explain things in plain English. You’ll know what changed and why.
-
-**No Pressure**  
-You’ll always know the scope before work starts.
-
-**Security-First**  
-Fixing the problem is good. Preventing the next one is better.
-
----
-
-## Testimonials (Coming Soon)
-
-Client reviews will be posted here after completed sessions.
-
-If you’ve worked with me and want to leave a review, email me at:  
-[kvjones0243@gmail.com](mailto:kvjones0243@gmail.com)
-
----
-
-## Contact
-
-**Email:** [kvjones0243@gmail.com](mailto:kvjones0243@gmail.com)  
-**Request Support:** [Support Intake Form](https://docs.google.com/forms/d/e/1FAIpQLSdyKiftIgcJzweKwpwo3SDnVfIdkEDmz1z0zy9CWlV2RoB0sg/viewform?usp=dialog)  
-**LinkedIn:** [linkedin.com/in/kaijones23](https://www.linkedin.com/in/kaijones23)
+<section class="cta-band">
+  <span class="eyebrow">Ready when you are</span>
+  <h2>Tell me what is going wrong, and I’ll help you get back on track.</h2>
+  <p>Use the intake form for the fastest response, or email me directly at <a href="mailto:kvjones0243@gmail.com">kvjones0243@gmail.com</a>.</p>
+  <div class="hero-actions">
+    <a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLSdyKiftIgcJzweKwpwo3SDnVfIdkEDmz1z0zy9CWlV2RoB0sg/viewform?usp=dialog">Start Intake Form</a>
+    <a class="secondary-button" href="https://www.linkedin.com/in/kaijones23">LinkedIn</a>
+  </div>
+</section>
