@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kai Jones — Accessibility, DeafBench, and security</title>
+  <meta name="description" content="Kai Jones builds DeafBench, studies security, and writes about accessibility, speech recognition, and careful technical work.">
+  <link rel="canonical" href="https://488315.github.io/">
+  <meta property="og:title" content="Kai Jones — Accessibility, DeafBench, and security">
+  <meta property="og:description" content="Notes and work on accessibility, speech recognition, and security.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://488315.github.io/">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Kai Jones","url":"https://488315.github.io/","sameAs":["https://github.com/488315","https://www.linkedin.com/in/kaijones23"],"knowsAbout":["Accessibility","Automatic speech recognition","Cybersecurity","IT support"]}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap nav-wrap">
+      <a class="wordmark" href="/" aria-label="Kai Jones, home">Kai Jones</a>
+      <nav aria-label="Primary navigation">
+        <a href="#work">Work</a>
+        <a href="/writing/">Writing</a>
+        <a href="#about">About</a>
+        <a class="nav-contact" href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <section class="hero" id="about" aria-labelledby="intro-title">
+      <h1 id="intro-title">I’m Kai.</h1>
+      <p class="hero-statement">I build tools, test systems, and care about accessibility.</p>
+      <p class="hero-copy">I’m Deaf. That shapes how I think about communication, details, and whether technology actually works for people.</p>
+    </section>
+
+    <section class="work-grid ruled" id="work" aria-labelledby="work-title">
+      <h2 id="work-title" class="sr-only">Work</h2>
+      <article class="work-item feature-work">
+        <h3><a href="https://github.com/488315/DeafBench">DeafBench</a></h3>
+        <p>DeafBench checks whether speech recognition preserves the information a person actually needs—not only whether the words look close.</p>
+        <figure class="cli-figure">
+          <img src="/assets/images/deafbench-cli.png" width="960" height="540" alt="DeafBench command-line evaluation showing word error rate, critical-information recall, non-speech recall, speaker attribution, latency, and three detected critical-information failures.">
+          <figcaption>Real output from <code>deafbench compare</code> on the public example files.</figcaption>
+        </figure>
+      </article>
+
+      <article class="work-item">
+        <h3>Bug bounty</h3>
+        <p>I’m learning bug bounty work through authorized programs and safe labs. I want to find real problems, write them down clearly, and help get them fixed.</p>
+        <p class="small-note">No testing without permission. No pretending a finding is bigger than the evidence.</p>
+      </article>
+
+      <article class="work-item">
+        <h3>IT and security</h3>
+        <p>I troubleshoot devices, accounts, and software. I also study how systems fail, then apply what I learn to safer setups and better explanations.</p>
+      </article>
+    </section>
+
+    <section class="evidence ruled" aria-labelledby="evidence-title">
+      <div class="section-intro">
+        <p class="section-label">DeafBench results</p>
+        <h2 id="evidence-title">What the numbers show</h2>
+        <p>These are local, reproducible results on DeafBench synthetic-v2: 25 samples built around names, times, codes, addresses, and other details that matter.</p>
+      </div>
+      <div class="table-wrap" tabindex="0" aria-label="Scrollable DeafBench model results">
+        <table>
+          <thead><tr><th>Model</th><th>WER</th><th>Critical recall</th><th>Missed details</th></tr></thead>
+          <tbody>
+            <tr><td>Granite Speech 4.1 2B</td><td>18.9%</td><td>91.9%</td><td>5</td></tr>
+            <tr><td>Parakeet TDT 0.6B v2</td><td>22.7%</td><td>91.9%</td><td>5</td></tr>
+            <tr><td>Qwen3-ASR 0.6B</td><td>26.6%</td><td>90.3%</td><td>6</td></tr>
+            <tr><td>ARK-ASR 0.6B INT8</td><td>26.6%</td><td>90.3%</td><td>6</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="data-note">Canonical semantic recall is shown. These are local benchmark results, not endorsements or a public leaderboard ranking. <a href="https://github.com/488315/DeafBench/tree/main/experiments/model-results">See the model evidence</a>.</p>
+    </section>
+
+    <section class="notes ruled" aria-labelledby="notes-title">
+      <div class="section-intro">
+        <p class="section-label">Writing</p>
+        <h2 id="notes-title">Notes, writeups, and what I’m learning.</h2>
+      </div>
+      <div class="post-list">
+        <article><p class="post-meta">Accessibility · 4 min</p><h3><a href="/writing/why-deafbench/">Why I made DeafBench</a></h3><p>Speech recognition can be technically close and still lose the one detail that matters.</p></article>
+        <article><p class="post-meta">Evaluation · 5 min</p><h3><a href="/writing/what-wer-misses/">What word error rate misses</a></h3><p>A small test where 2.0% WER hid a complete failure to caption environmental sounds.</p></article>
+        <article><p class="post-meta">Security · 3 min</p><h3><a href="/writing/scope-first-security/">Why I start with scope</a></h3><p>My rules for learning bug bounty work without crossing the line.</p></article>
+      </div>
+      <p><a class="text-link" href="/writing/">View the writing archive →</a></p>
+    </section>
+
+    <section class="values-contact ruled">
+      <div>
+        <p class="section-label">What I care about</p>
+        <div class="values-grid">
+          <article><h2>Accessibility</h2><p>Communication should be clear and inclusive. I build and test with Deaf and hard-of-hearing people in mind.</p></article>
+          <article><h2>Security</h2><p>Security is about people and systems. I focus on practical fixes and plain explanations.</p></article>
+          <article><h2>Details</h2><p>Small details change outcomes. I look closely, ask questions, and keep improving.</p></article>
+        </div>
+      </div>
+      <aside class="contact-block" id="contact">
+        <p class="section-label">Contact</p>
+        <h2>Say hello.</h2>
+        <p>If you want to talk about accessibility, security, or DeafBench, email me.</p>
+        <a class="text-link" href="mailto:kvjones0243@gmail.com">kvjones0243@gmail.com</a>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-wrap"><p>© <span id="year">2026</span> Kai Jones</p><p><a href="https://github.com/488315">GitHub</a> · <a href="https://www.linkedin.com/in/kaijones23">LinkedIn</a></p></div>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
