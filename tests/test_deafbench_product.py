@@ -76,5 +76,15 @@ class DeafBenchProductPageTests(unittest.TestCase):
         self.assertIn('<main id="main"', self.source)
         self.assertEqual(len(self.parser.ids), self.source.count(' id="'))
 
+    def test_homepage_and_sitemap_expose_product_page(self) -> None:
+        homepage = (ROOT / "index.html").read_text(encoding="utf-8")
+        sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
+        self.assertIn('href="/products/deafbench/"', homepage)
+        self.assertIn(
+            "https://488315.github.io/products/deafbench/",
+            sitemap,
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
