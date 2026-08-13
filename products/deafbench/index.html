@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DeafBench — accessibility-critical ASR evaluation</title>
+  <meta name="description" content="A public demonstration of DeafBench, an ASR benchmark that measures word errors, critical-information failures, acoustic stress, and local performance without treating unlike evidence as comparable.">
+  <link rel="canonical" href="https://488315.github.io/products/deafbench/">
+  <meta property="og:title" content="DeafBench — accessibility-critical ASR evaluation">
+  <meta property="og:description" content="See what DeafBench measures, which models run, and which results are still missing.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://488315.github.io/products/deafbench/">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap nav-wrap">
+      <a class="wordmark" href="/" aria-label="Kai Jones, home">Kai Jones</a>
+      <nav aria-label="Primary navigation">
+        <a href="/">Home</a>
+        <a href="/writing/">Writing</a>
+        <a class="nav-contact" href="https://github.com/488315/DeafBench">Source</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap product-shell">
+    <header class="product-hero">
+      <p class="section-label">DeafBench</p>
+      <h1>I test what an ASR system drops when the detail matters.</h1>
+      <p class="product-lede">I wrote DeafBench because a transcript can look mostly right and still lose a time, a username, a dosage, or the word “not.” It keeps ordinary word error rate, but it also scores those failures directly and records the exact evidence behind a result.</p>
+      <div class="product-actions">
+        <a class="button-link" href="https://github.com/488315/DeafBench">Read the code</a>
+        <a class="text-link" href="#demo">See the public demo ↓</a>
+      </div>
+    </header>
+
+    <section class="ruled demo-boundary" aria-labelledby="boundary-title">
+      <div>
+        <p class="section-label">Evidence boundary</p>
+        <h2 id="boundary-title">Synthetic accessibility stress demo</h2>
+      </div>
+      <div>
+        <p>This demonstration uses DeafBench’s authorized synthetic corpus. It tests whether model output preserves declared critical details while audio is changed in controlled ways. It does not measure Deaf or hard-of-hearing speakers, dysarthric speech, accents, age groups, or any other human demographic.</p>
+        <p>Those questions need authorized, consented, appropriately licensed human speech, declared cohorts, sample sizes, uncertainty, and disjoint development and evaluation sets. I will not substitute a synthetic voice effect for that evidence.</p>
+      </div>
+    </section>
+
+    <section class="ruled" id="demo" aria-labelledby="demo-title">
+      <div class="section-intro product-intro">
+        <p class="section-label">What gets stressed</p>
+        <h2 id="demo-title">The details and conditions are declared before a model runs.</h2>
+        <p>Every row below describes a failure DeafBench can count separately from overall WER. The full frozen suite contains 24 utterances and gives each clean reference a controlled stress condition.</p>
+      </div>
+      <div class="scenario-grid">
+        <article><p class="scenario-type">Time</p><p>“The appointment is at 8:30 p.m.”</p></article>
+        <article><p class="scenario-type">Date</p><p>“The deadline is November 14.”</p></article>
+        <article><p class="scenario-type">Dosage</p><p>“Take 12 milligrams at noon.”</p></article>
+        <article><p class="scenario-type">Name</p><p>“Ask for Nia Solano at reception.”</p></article>
+        <article><p class="scenario-type">Username</p><p>“The username is kai.jones_27.”</p></article>
+        <article><p class="scenario-type">Code</p><p>“The access code is H7Q9.”</p></article>
+        <article><p class="scenario-type">Confirmation number</p><p>“The confirmation number is 804193.”</p></article>
+        <article><p class="scenario-type">Wi-Fi name</p><p>“Connect to North Hall Guest.”</p></article>
+        <article><p class="scenario-type">Address</p><p>“Meet at 214 Cedar Avenue.”</p></article>
+        <article><p class="scenario-type">Money</p><p>“The total is $46.20.”</p></article>
+        <article><p class="scenario-type">Negation</p><p>“Do not take the west entrance.”</p></article>
+      </div>
+      <div class="stress-strip" aria-label="Declared acoustic stress conditions">
+        <p><strong>Noise:</strong> street, office chatter, keyboard, breathing, rustling, and wind at −5, 0, 10, and 20 dB SNR.</p>
+        <p><strong>Signal changes:</strong> 8 kHz telephony, reverberation, long intra-phrase pauses, and speaking-rate variation.</p>
+        <p><strong>Tracked failures:</strong> substitutions, insertions, deletions, hallucinations in interstitial noise, critical-entity misses, and caption timestamp drift over 500 ms.</p>
+      </div>
+    </section>
+
+    <section class="ruled" aria-labelledby="results-title">
+      <div class="section-intro product-intro">
+        <p class="section-label">Comparable lane</p>
+        <h2 id="results-title">Synthetic-v2 results</h2>
+        <p>These seven models ran the same 25-sample local corpus. Canonical recall accepts harmless representation differences but does not fuzzy-match usernames, codes, Wi-Fi names, incomplete numbers, or wrong times.</p>
+      </div>
+      <div class="table-wrap" tabindex="0" aria-label="Scrollable synthetic-v2 model results">
+        <table>
+          <thead><tr><th>Model</th><th>WER</th><th>Strict recall</th><th>Canonical recall</th><th>Local RTFx</th><th>Peak VRAM</th></tr></thead>
+          <tbody>
+            <tr><td>Qwen3-ASR 0.6B</td><td>26.6%</td><td>67.7%</td><td>90.3%</td><td>10.47</td><td>1.52 GiB</td></tr>
+            <tr><td>Qwen3-ASR 1.7B</td><td>21.0%</td><td>67.7%</td><td>91.9%</td><td>9.89</td><td>3.86 GiB</td></tr>
+            <tr><td>Parakeet TDT 0.6B v2</td><td>22.7%</td><td>64.5%</td><td>91.9%</td><td>71.23</td><td>4.67 GiB</td></tr>
+            <tr><td>Granite Speech 4.1 2B</td><td>18.9%</td><td>69.4%</td><td>91.9%</td><td>12.91</td><td>4.35 GiB</td></tr>
+            <tr><td>Granite Speech 4.1 2B NAR</td><td>40.6%</td><td>64.5%</td><td>87.1%</td><td>45.07</td><td>4.26 GiB</td></tr>
+            <tr><td>ARK-ASR 0.6B</td><td>30.1%</td><td>66.1%</td><td>90.3%</td><td>14.85</td><td>2.20 GiB</td></tr>
+            <tr><td>ARK-ASR 0.6B INT8 ONNX</td><td>26.6%</td><td>66.1%</td><td>90.3%</td><td>2.40</td><td>CPU</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="data-note product-note">Local RTFx and VRAM depend on the test computer. This is a synthetic accessibility lane, not a Hugging Face leaderboard result and not a ranking across unlike datasets.</p>
+    </section>
+
+    <section class="ruled" aria-labelledby="inventory-title">
+      <div class="section-intro product-intro">
+        <p class="section-label">Complete inventory</p>
+        <h2 id="inventory-title">All eleven integrated model paths</h2>
+        <p>“Integrated” means DeafBench has an adapter or runner. It does not mean every model has comparable completed evidence. Missing results stay missing.</p>
+      </div>
+      <div class="table-wrap" tabindex="0" aria-label="Scrollable integrated model inventory">
+        <table>
+          <thead><tr><th>Model</th><th>Evidence currently shown</th><th>Lane</th></tr></thead>
+          <tbody>
+            <tr><td>OpenAI Whisper turbo</td><td>Completed historical reports</td><td>Core v1 and non-speech v1</td></tr>
+            <tr><td>Faster-Whisper small.en</td><td>Completed frozen and development baselines</td><td>Core v1 and public real-speech dev</td></tr>
+            <tr><td>Whisper-AT medium.en</td><td>Result not completed</td><td>Adapter and workflow only</td></tr>
+            <tr><td>Distil-Whisper large-v3</td><td>Result not completed</td><td>Adapter and local runner only</td></tr>
+            <tr><td>Qwen3-ASR 0.6B</td><td>Completed</td><td>Synthetic-v2 and real-speech smoke</td></tr>
+            <tr><td>Qwen3-ASR 1.7B</td><td>Completed</td><td>Synthetic-v2 and real-speech smoke</td></tr>
+            <tr><td>Parakeet TDT 0.6B v2</td><td>Completed</td><td>Synthetic-v2 and real-speech smoke</td></tr>
+            <tr><td>Granite Speech 4.1 2B</td><td>Completed</td><td>Synthetic-v2 and real-speech smoke</td></tr>
+            <tr><td>Granite Speech 4.1 2B NAR</td><td>Completed</td><td>Synthetic-v2 and real-speech smoke</td></tr>
+            <tr><td>ARK-ASR 0.6B</td><td>Completed</td><td>Synthetic-v2 and real-speech smoke</td></tr>
+            <tr><td>ARK-ASR 0.6B INT8 ONNX</td><td>Completed</td><td>Synthetic-v2 and real-speech smoke</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="ruled goal-grid" aria-labelledby="goal-title">
+      <div>
+        <p class="section-label">Real-speech goal</p>
+        <h2 id="goal-title">The target is the Open ASR Leaderboard contract, not a convenient local score.</h2>
+      </div>
+      <div>
+        <p>DeafBench has a separate official-compatible real-speech path and a deterministic 100-sample public development cohort. The current Faster-Whisper <code>small.en</code> development baseline is 3.56% normalized WER on that cohort. It is development evidence, not the seven-dataset leaderboard macro-average.</p>
+        <p>The long-term goal is to beat the published 5.37% average WER reference under the official dataset revisions, preprocessing, normalization, macro-average, and submission rules. I will not claim that result unless Hugging Face verifies it.</p>
+      </div>
+    </section>
+
+    <section class="ruled pilot-status" aria-labelledby="pilot-title">
+      <p class="section-label">Customer-run audit</p>
+      <h2 id="pilot-title">The audit is designed to run on the customer’s computer.</h2>
+      <p>Audio stays with the customer. Exported evidence is limited to sanitized aggregate metrics, environment-dependent labels, model and evaluator identifiers, configuration, counts, and artifact hashes. Raw audio, transcripts, filenames, paths, identities, secrets, and critical-information values are excluded by a fail-closed scanner.</p>
+      <p><strong>Status:</strong> the workflow is still being validated. I am not accepting customer audio or payment yet.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-wrap"><p>© <span id="year">2026</span> Kai Jones</p><p><a href="https://github.com/488315/DeafBench">DeafBench source</a> · <a href="/writing/why-deafbench/">Why I made it</a></p></div>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
