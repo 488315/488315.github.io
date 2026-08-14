@@ -55,9 +55,11 @@ class DeafBenchProductPageTests(unittest.TestCase):
 
     def test_publishes_measured_whisper_evidence(self) -> None:
         self.assertIn(
-            "These nine models ran the same 25-sample local corpus",
+            "These nine rows are recorded local observations from the same 25-sample corpus",
             self.visible_text,
         )
+        self.assertIn("cannot be independently recomputed", self.visible_text)
+        self.assertIn("Recorded local observation", self.visible_text)
         self.assertIn(
             "Distil-Whisper large-v3 23.8% 66.1% 91.9% 0.80 CPU",
             self.visible_text,
