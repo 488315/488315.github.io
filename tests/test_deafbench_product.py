@@ -1,5 +1,7 @@
 from html.parser import HTMLParser
+import json
 from pathlib import Path
+import re
 import unittest
 
 
@@ -112,6 +114,44 @@ class DeafBenchProductPageTests(unittest.TestCase):
         self.assertIn(
             "https://488315.github.io/products/deafbench/",
             sitemap,
+        )
+
+    def test_declares_product_discovery_metadata(self) -> None:
+        expected_tags = (
+            '<link rel="canonical" href="https://488315.github.io/products/deafbench/">',
+            '<meta property="og:type" content="website">',
+            '<meta property="og:image" content="https://488315.github.io/assets/images/deafbench-social-card.png">',
+            '<meta name="twitter:card" content="summary_large_image">',
+            '<meta name="twitter:image" content="https://488315.github.io/assets/images/deafbench-social-card.png">',
+        )
+        for tag in expected_tags:
+            with self.subTest(tag=tag):
+                self.assertIn(tag, self.source)
+
+    def test_publishes_software_and_dataset_structured_data(self) -> None:
+        scripts = re.findall(
+            r'<script type="application/ld\+json">(.*?)</script>',
+            self.source,
+            flags=re.DOTALL,
+        )
+        self.assertEqual(len(scripts), 1)
+        payload = json.loads(scripts[0])
+        graph = payload["@graph"]
+        self.assertEqual(
+            {item["@type"] for item in graph},
+            {"SoftwareApplication", "Dataset"},
+        )
+        software = next(item for item in graph if item["@type"] == "SoftwareApplication")
+        dataset = next(item for item in graph if item["@type"] == "Dataset")
+        self.assertEqual(software["softwareVersion"], "0.2.1")
+        self.assertEqual(software["downloadUrl"], "https://pypi.org/project/deafbench/")
+        self.assertIn("sample-level run artifacts are not included", dataset["description"])
+
+    def test_links_to_installation_and_methodology(self) -> None:
+        self.assertIn('href="https://pypi.org/project/deafbench/"', self.source)
+        self.assertIn(
+            'href="https://github.com/488315/DeafBench/blob/main/docs/asr-evaluation-methodology.md"',
+            self.source,
         )
 
 
