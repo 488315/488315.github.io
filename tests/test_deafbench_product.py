@@ -150,6 +150,10 @@ class DeafBenchProductPageTests(unittest.TestCase):
     def test_links_to_installation_and_methodology(self) -> None:
         self.assertIn('href="https://pypi.org/project/deafbench/"', self.source)
         self.assertIn(
+            'href="https://huggingface.co/datasets/kvjones0243/deafbench-synthetic-v2"',
+            self.source,
+        )
+        self.assertIn(
             'href="https://github.com/488315/DeafBench/blob/main/docs/asr-evaluation-methodology.md"',
             self.source,
         )
