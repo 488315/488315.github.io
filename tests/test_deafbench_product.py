@@ -53,6 +53,20 @@ class DeafBenchProductPageTests(unittest.TestCase):
             with self.subTest(model=model):
                 self.assertIn(model, self.visible_text)
 
+    def test_publishes_measured_whisper_evidence(self) -> None:
+        self.assertIn(
+            "These nine models ran the same 25-sample local corpus",
+            self.visible_text,
+        )
+        self.assertIn(
+            "Distil-Whisper large-v3 23.8% 66.1% 91.9% 0.80 CPU",
+            self.visible_text,
+        )
+        self.assertIn(
+            "Whisper-AT medium.en 26.2% 67.7% 96.8% 7.34 4.46 GiB",
+            self.visible_text,
+        )
+
     def test_covers_accessibility_critical_entity_types(self) -> None:
         expected_entities = (
             "Time",

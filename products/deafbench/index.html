@@ -77,7 +77,7 @@
       <div class="section-intro product-intro">
         <p class="section-label">Comparable lane</p>
         <h2 id="results-title">Synthetic-v2 results</h2>
-        <p>These seven models ran the same 25-sample local corpus. Canonical recall accepts harmless representation differences but does not fuzzy-match usernames, codes, Wi-Fi names, incomplete numbers, or wrong times.</p>
+        <p>These nine models ran the same 25-sample local corpus. Canonical recall accepts harmless representation differences but does not fuzzy-match usernames, codes, Wi-Fi names, incomplete numbers, or wrong times.</p>
       </div>
       <div class="table-wrap" tabindex="0" aria-label="Scrollable synthetic-v2 model results">
         <table>
@@ -90,6 +90,8 @@
             <tr><td>Granite Speech 4.1 2B NAR</td><td>40.6%</td><td>64.5%</td><td>87.1%</td><td>45.07</td><td>4.26 GiB</td></tr>
             <tr><td>ARK-ASR 0.6B</td><td>30.1%</td><td>66.1%</td><td>90.3%</td><td>14.85</td><td>2.20 GiB</td></tr>
             <tr><td>ARK-ASR 0.6B INT8 ONNX</td><td>26.6%</td><td>66.1%</td><td>90.3%</td><td>2.40</td><td>CPU</td></tr>
+            <tr><td>Distil-Whisper large-v3</td><td>23.8%</td><td>66.1%</td><td>91.9%</td><td>0.80</td><td>CPU</td></tr>
+            <tr><td>Whisper-AT medium.en</td><td>26.2%</td><td>67.7%</td><td>96.8%</td><td>7.34</td><td>4.46 GiB</td></tr>
           </tbody>
         </table>
       </div>
@@ -108,8 +110,8 @@
           <tbody>
             <tr><td>OpenAI Whisper turbo</td><td>Completed historical reports</td><td>Core v1 and non-speech v1</td></tr>
             <tr><td>Faster-Whisper small.en</td><td>Completed frozen and development baselines</td><td>Core v1 and public real-speech dev</td></tr>
-            <tr><td>Whisper-AT medium.en</td><td>Result not completed</td><td>Adapter and workflow only</td></tr>
-            <tr><td>Distil-Whisper large-v3</td><td>Result not completed</td><td>Adapter and local runner only</td></tr>
+            <tr><td>Whisper-AT medium.en</td><td>Completed</td><td>Synthetic-v2, real-speech smoke, and non-speech-v1</td></tr>
+            <tr><td>Distil-Whisper large-v3</td><td>Completed</td><td>Synthetic-v2 and real-speech smoke</td></tr>
             <tr><td>Qwen3-ASR 0.6B</td><td>Completed</td><td>Synthetic-v2 and real-speech smoke</td></tr>
             <tr><td>Qwen3-ASR 1.7B</td><td>Completed</td><td>Synthetic-v2 and real-speech smoke</td></tr>
             <tr><td>Parakeet TDT 0.6B v2</td><td>Completed</td><td>Synthetic-v2 and real-speech smoke</td></tr>
