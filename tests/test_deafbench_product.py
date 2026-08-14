@@ -34,6 +34,9 @@ class DeafBenchProductPageTests(unittest.TestCase):
         self.assertIn("Synthetic accessibility stress demo", self.visible_text)
         self.assertIn("does not measure Deaf or hard-of-hearing speakers", self.visible_text)
         self.assertIn("not a Hugging Face leaderboard result", self.visible_text)
+        self.assertIn(
+            "I am not accepting customer audio or payment yet", self.visible_text
+        )
 
     def test_lists_every_integrated_model(self) -> None:
         expected_models = (
