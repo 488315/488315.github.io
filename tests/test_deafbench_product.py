@@ -71,6 +71,16 @@ class DeafBenchProductPageTests(unittest.TestCase):
             "Whisper-AT medium.en 26.2% 67.7% 96.8% 7.34 4.46 GiB",
             self.visible_text,
         )
+        self.assertIn(
+            "Whisper-AT medium.en Recorded local observation "
+            "Synthetic-v2, real-speech smoke, and non-speech-v1",
+            self.visible_text,
+        )
+        self.assertIn(
+            "Distil-Whisper large-v3 Recorded local observation "
+            "Synthetic-v2 and real-speech smoke",
+            self.visible_text,
+        )
 
     def test_covers_accessibility_critical_entity_types(self) -> None:
         expected_entities = (
